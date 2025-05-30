@@ -1,5 +1,5 @@
-import InputComponent from "../Components/InputComponent";
-import ButtonComponent from "../Components/ButtonComponent";
+import InputComponent from "../Components/ui/InputComponent";
+import ButtonComponent from "../Components/ui/ButtonComponent";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Hookes/useAuth";
 import { useState } from "react";
@@ -8,7 +8,7 @@ import { Slide, toast, ToastContainer } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, isLoggedIn } = useAuth();
   const [_, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [formErrors, setFormErrors] = useState({})
@@ -17,6 +17,11 @@ const Login = () => {
     email: '',
     password: ''
   });
+
+  if (isLoggedIn) {
+    navigate("/");
+    return null;
+  }
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -120,7 +125,7 @@ const Login = () => {
 
             <div className="flex items-center justify-center w-full">
               <ButtonComponent
-              width="w-full"
+                width="w-full"
                 label="Sign in"
               />
             </div>

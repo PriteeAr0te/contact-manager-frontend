@@ -1,5 +1,5 @@
-import InputComponent from "../Components/InputComponent";
-import ButtonComponent from "../Components/ButtonComponent";
+import InputComponent from "../Components/ui/InputComponent";
+import ButtonComponent from "../Components/ui/ButtonComponent";
 import { Slide, toast, ToastContainer } from "react-toastify";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
