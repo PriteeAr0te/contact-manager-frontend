@@ -59,7 +59,7 @@ const Login = () => {
       localStorage.setItem('token', token);
       login(token, user);
       console.log("token: ", token)
-      toast.success("Login Successfull")
+      toast.success("Login Successfull!")
       navigate("/");
     } catch (err) {
       console.log("Login Error: ", err);
@@ -70,16 +70,16 @@ const Login = () => {
   }
 
   return (
-    <>
+    <div className="bg-dark-background min-h-screen flex items-center justify-center text-white">
       <ToastContainer position="top-right" transition={Slide} className="z-50" autoClose={6000} closeButton={true} pauseOnHover={true} />
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-10 lg:px-8 bg-white rounded-md">
+      <div className="flex min-h-full flex-1 flex-col justify-center items-center px-6 py-10 lg:px-8 rounded-md">
         <div className="sm:mx-auto sm:w-full sm:max-w-lg sm:min-w-md">
           <img
             alt="Your Company"
             src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
             className="mx-auto h-10 w-auto"
           />
-          <h2 className="mt-6 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-white">
             Sign in to your account
           </h2>
         </div>
@@ -88,6 +88,7 @@ const Login = () => {
           <form onSubmit={handleSubmit} className="space-y-6 text-left">
             <div>
               <InputComponent
+                theme="dark"
                 id="email"
                 name="email"
                 label="Email Address"
@@ -102,6 +103,7 @@ const Login = () => {
 
             <div>
               <InputComponent
+                theme="dark"
                 id="password"
                 name="password"
                 label="Password"
@@ -116,21 +118,24 @@ const Login = () => {
 
             {error && <p className="text-red-600 text-sm">{error}</p>}
 
-            <ButtonComponent
-              label="Sign in"
-            />
+            <div className="flex items-center justify-center w-full">
+              <ButtonComponent
+              width="w-full"
+                label="Sign in"
+              />
+            </div>
 
           </form>
 
-          <p className="mt-6 text-center text-gray-500">
+          <p className="mt-6 text-center text-gray-200">
             Not a member?{' '}
-            <Link to="/register" className="font-semibold text-indigo-700 hover:text-indigo-500">
+            <Link to="/register" className="font-semibold text-indigo-600 hover:text-indigo-100">
               Create an account
             </Link>
           </p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

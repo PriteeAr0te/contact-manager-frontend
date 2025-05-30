@@ -46,22 +46,22 @@ const Home = () => {
   }
 
   return (
-    <div className="p-6 max-w-4xl min-w-6xl mx-auto py-12">
+    <div className="px-4 w-full min-h-screen mx-auto py-12 xl:px-32 2xl:px-40 bg-white dark:bg-dark-background">
       <div className="flex justify-between mb-6">
-        <h1 className="text-3xl font-bold text-center flex-1">Contact Manager</h1>
+        <h1 className="text-3xl font-bold text-center dark:text-white flex-1">Contact Manager</h1>
         <ButtonComponent label="Create Contact" width="w-fit" onClick={() => console.log("Create Contact")} />
       </div>
 
       {contacts.length === 0 ? (
-        <p className="text-center text-gray-500">No contacts available.</p>
+        <p className="text-center text-gray-500 dark:text-gray-200">No contacts available.</p>
       ) : (
         <ul className="space-y-4">
           {contacts.map((contact) => (
-            <li key={contact._id} className="border rounded-lg p-4 shadow-sm flex justify-between items-center">
+            <li key={contact._id} className="border dark:border-gray-100 rounded-lg p-4 shadow-sm flex justify-between items-center">
               <div>
-                <p className="font-semibold text-lg">{contact.name}</p>
-                <p className="text-gray-600 text-sm">{contact.email}</p>
-                <p className="text-gray-600 text-sm">{contact.phone}</p>
+                <p className="font-semibold text-lg dark:text-gray-100">{contact.name}</p>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">{contact.email}</p>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">{contact.phone}</p>
               </div>
               <div className="space-x-2">
                 <button

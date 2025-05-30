@@ -67,16 +67,16 @@ const Register = () => {
   }
 
   return (
-    <>
+    <div className="bg-dark-background min-h-screen flex items-center justify-center text-white">
       <ToastContainer position="top-right" transition={Slide} className="z-50" autoClose={6000} closeButton={true} pauseOnHover={true} />
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-10 lg:px-8 bg-white rounded-md">
+      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-10 lg:px-8 rounded-md">
         <div className="sm:mx-auto sm:w-full sm:max-w-md min-w-md">
           <img
             alt="Your Company"
             src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
             className="mx-auto h-10 w-auto"
           />
-          <h2 className="mt-6 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-white">
             Create your account
           </h2>
         </div>
@@ -85,6 +85,7 @@ const Register = () => {
           <form className="space-y-6 text-left" onSubmit={handleSubmit} >
             <div>
               <InputComponent
+                theme="dark"
                 id="name"
                 name="username"
                 label="Full Name"
@@ -98,6 +99,7 @@ const Register = () => {
 
             <div>
               <InputComponent
+                theme="dark"
                 id="email"
                 name="email"
                 label="Email Address"
@@ -111,6 +113,7 @@ const Register = () => {
 
             <div>
               <InputComponent
+                theme="dark"
                 id="password"
                 name="password"
                 value={formData.password}
@@ -124,22 +127,25 @@ const Register = () => {
 
             {error && <p className="text-red-600 text-sm">{error}</p>}
 
-            <ButtonComponent
-              label="Register"
-              type="submit"
-            />
+            <div className="flex items-center justify-center w-full">
+              <ButtonComponent
+              width="w-full"
+                label="Register"
+                type="submit"
+              />
+            </div>
 
           </form>
 
-          <p className="mt-6 text-center text-sm/6 text-gray-500">
+          <p className="mt-6 text-center text-gray-200">
             Already have an account?{' '}
-            <Link to="/login" className="font-semibold text-indigo-700 hover:text-indigo-500">
+            <Link to="/login" className="font-semibold text-indigo-600 hover:text-indigo-100">
               Sign in here
             </Link>
           </p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
