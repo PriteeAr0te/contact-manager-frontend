@@ -27,7 +27,7 @@ const Home = () => {
 
   useEffect(() => {
     fetchContacts();
-  }, [contacts]);
+  }, []);
 
   const handleEdit = async (id) => {
     try {
