@@ -10,11 +10,11 @@ import DropdownComponent from './DropdownComponent'
 import ProfilePhotoUpload from './ProfilePhotoUpload'
 
 const options = [
-    { label: 'Primary', value: 'primary' },
-    { label: 'Work', value: 'work' },
-    { label: 'Family', value: 'family' },
-    { label: 'Friends', value: 'friends' },
-    { label: 'College', value: 'college' },
+    { label: 'Primary', value: 'Primary' },
+    { label: 'Work', value: 'Work' },
+    { label: 'Family', value: 'Family' },
+    { label: 'Friends', value: 'Friends' },
+    { label: 'College', value: 'College' },
 ]
 
 const CreateContactModal = ({ isOpen, setIsOpen }) => {
@@ -90,7 +90,7 @@ const CreateContactModal = ({ isOpen, setIsOpen }) => {
         payload.append('address', formData.address);
         payload.append('isFavorite', formData.isFavorite);
         payload.append('notes', formData.notes);
-        payload.append('tags', formData.tags[0]);
+        payload.append('tags', formData.tags[0]?.value || '');
         if (profilePhoto?.file) {
             payload.append('profilePicture', profilePhoto.file);
         }
@@ -208,7 +208,8 @@ const CreateContactModal = ({ isOpen, setIsOpen }) => {
                                     ...prev,
                                     tags: selected
                                 }))
-                            }} />
+                            }} 
+                            />
                         </div>
 
                         <div>

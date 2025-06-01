@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
-import InputComponent from './InputComponent'
-import ButtonComponent from './ButtonComponent'
-import API from '../../lib/api'
-import { toast } from 'react-toastify'
-import TextareaComponent from './TextareaComponent'
-import ProfilePhotoUpload from './ProfilePhotoUpload'
-import CheckboxComponent from './CheckboxComponent'
-import DropdownComponent from './DropdownComponent'
+import React, { useState } from 'react'
+import { Slide, toast, ToastContainer } from 'react-toastify'
+import InputComponent from '../Components/ui/InputComponent';
+import TextareaComponent from '../Components/ui/TextareaComponent';
+import ProfilePhotoUpload from '../Components/ui/ProfilePhotoUpload';
+import CheckboxComponent from '../Components/ui/CheckboxComponent';
+import DropdownComponent from '../Components/ui/DropdownComponent';
+import ButtonComponent from '../Components/ui/ButtonComponent';
+import API from '../lib/api';
+
 
 const options = [
     { label: 'Primary', value: 'Primary' },
@@ -15,47 +15,31 @@ const options = [
     { label: 'Family', value: 'Family' },
     { label: 'Friends', value: 'Friends' },
     { label: 'College', value: 'College' },
-];
+]
 
-const getInitialFormData = (contact) => ({
-    name: contact?.name || '',
-    email: contact?.email || '',
-    phone: contact?.phone || '',
-    address: contact?.address || '',
-    isFavorite: contact?.isFavorite || false,
-    tags: contact?.tags && contact.tags.length > 0
-        ? [contact.tags[0]]
-        : [],
-    notes: contact?.notes || '',
-    profilePicture: contact?.profilePicture || null,
-});
-
-const EditContactModal = ({ isOpen, setIsOpen, contact }) => {
+const CreateContact = () => {
     const [error, setError] = useState('');
     const [formErrors, setFormErrors] = useState({});
-    const [profilePhoto, setProfilePhoto] = useState({
-        file: null,
-        previewUrl: contact?.profilePicture || null,
-    })
-
-    const [formData, setFormData] = useState(getInitialFormData(contact));
-
-    useEffect(() => {
-        if (contact) {
-            setFormData(getInitialFormData(contact));
-            setProfilePhoto({
-                file: null,
-                previewUrl: contact?.profilePicture || null,
-            });
-        }
-    }, [contact]);
+    const [profilePhoto, setProfilePhoto] = useState(null);
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        address: '',
+        isFavorite: false,
+        tags: ['primary'],
+        notes: '',
+        profilePicture: null
+    });
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
+
         const newValue = type === 'checkbox' ? checked : value;
+
         setFormData(prevData => ({
             ...prevData,
-            [name]: newValue,
+            [name]: newValue
         }))
     }
 
@@ -96,9 +80,9 @@ const EditContactModal = ({ isOpen, setIsOpen, contact }) => {
             setFormErrors(errors);
             return;
         }
-        console.log("formData edit: ", formData);
         setFormErrors({});
-        // setError('');
+        setError('');
+
         const payload = new FormData();
         payload.append('name', formData.name);
         payload.append('email', formData.email);
@@ -107,48 +91,48 @@ const EditContactModal = ({ isOpen, setIsOpen, contact }) => {
         payload.append('isFavorite', formData.isFavorite);
         payload.append('notes', formData.notes);
         payload.append('tags', formData.tags[0] || '');
-        if (profilePhoto.file) {
+        if (profilePhoto?.file) {
             payload.append('profilePicture', profilePhoto.file);
-        } else {
-            payload.append('profilePicture', contact.profilePicture);
-        }
-
-        for (let [key, val] of payload.entries()) {
-            console.log(key, val);
         }
 
         try {
-            const response = await API.put(`/contacts/${contact._id}`, payload);
-
-            console.log("updated data: ", response.data);
-            
-            if (response.status === 200 && response.data) {
-                await toast.success("Contact updated successfully!");
-                setIsOpen(false);
-                setFormData(getInitialFormData(null));
-                setProfilePhoto({ file: null, previewUrl: null });
+            const response = await API.post("/contacts", payload, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
+            });
+            console.log(response);
+            if (response.status === 201 && response.data) {
+                await toast.success("Contact created successfully!");
+                setFormData({
+                    name: '',
+                    email: '',
+                    phone: '',
+                    address: '',
+                    isFavorite: false,
+                    tags: ['primary'],
+                    notes: '',
+                    profilePicture: null
+                });
             } else {
-                setError("Failed to update contact. Please try again.");
+                setError("Failed to create contact. Please try again.");
             }
         } catch (err) {
-            console.error("Error updating contact:", err);
-            setError("Failed to update contact. Please try again.");
+            console.error("Error creating contact:", err);
+            setError("Failed to create contact. Please try again.");
             return;
         }
-        console.log("Contact Updated Successfully");
+        console.log("Contact Created");
     }
 
     return (
-        <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-10">
-            <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
-            <div className="fixed inset-0 flex items-center justify-center p-4">
-                <DialogPanel className="w-full h-full sm:max-w-xl rounded-xl bg-white dark:bg-dark-background p-6 shadow-lg min-h-[100vh-30px] scrollbar overflow-y-scroll" id="style-7">
-                    <DialogTitle className="text-lg font-bold flex justify-between items-center dark:text-white text-gray-800 mb-4">
-                        <span>Update Contact</span>
-                        <div className="cursor-pointer text-gray-800 p-1 hover:bg-gray-50 rounded-lg" onClick={() => setIsOpen(false)}>
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentcolor"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" /></svg>
-                        </div>
-                    </DialogTitle>
+        <>
+            <ToastContainer position="top-right" transition={Slide} className="z-50" autoClose={6000} closeButton={true} pauseOnHover={true} />
+            <div className="flex items-center justify-center p-4">
+                <div className="w-full h-full sm:max-w-xl rounded-xl bg-white dark:bg-dark-background p-6 shadow-lg">
+                    <div className="text-lg font-bold flex justify-between items-center dark:text-white text-gray-800 mb-4" >
+                        <span>Create New Contact</span>
+                    </div>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
@@ -218,11 +202,11 @@ const EditContactModal = ({ isOpen, setIsOpen, contact }) => {
                             <DropdownComponent
                                 search={false}
                                 label='Select Tag'
-                                name="tags"
+                                name="Tag"
                                 id="tags"
                                 showCheckbox={false}
                                 options={options}
-                                selectedValue={formData.tags[0] || ''}
+                                selectedValue={formData.tags[0] || ""}
                                 onChange={(selected) => {
                                     setFormData(prev => ({
                                         ...prev,
@@ -230,7 +214,6 @@ const EditContactModal = ({ isOpen, setIsOpen, contact }) => {
                                     }))
                                 }}
                             />
-                            {console.log("edit tag: ", formData.tags[0])}
                         </div>
 
                         <div>
@@ -247,25 +230,25 @@ const EditContactModal = ({ isOpen, setIsOpen, contact }) => {
                         {error && <p className="text-red-600 text-sm mt-3">{error}</p>}
 
                         <div className="flex justify-end gap-2 pt-4">
-                            <button
+                            {/* <button
                                 type="button"
                                 onClick={() => setIsOpen(false)}
-                                className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-800 hover:bg-gray-50"
+                                className="rounded-md border cursor-pointer border-gray-300 bg-white px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
                             >
                                 Cancel
-                            </button>
+                            </button> */}
                             <ButtonComponent
-                                label="Update Contact"
+                                label="Create Contact"
                                 type="submit"
                                 width="w-fit" />
 
                         </div>
                     </form>
-                </DialogPanel>
+                </div>
             </div>
-        </Dialog>
-    )
 
+        </>
+    )
 }
 
-export default EditContactModal
+export default CreateContact

@@ -29,6 +29,21 @@ const Header = () => {
                     </Link>
 
                     <div className="flex items-center space-x-4">
+
+                        <Link
+                            to="/create-contact"
+                            className={`flex w-fit cursor-pointer justify-center rounded-md bg-indigo-600 px-3 py-1.5 font-semibold text-white hover:bg-indigo-500 focus:border-0 focus:outline-none`}
+                        >
+                            Create Contact
+                        </Link>
+                        
+                        {isLoggedIn &&
+                            <button onClick={logout}>
+                                <span className="hidden sm:block text-sm 2xl:text-base font-medium px-4 py-2.5 rounded-md text-primary bg-white transition hover:bg-[#7E21D4] hover:text-white cursor-pointer">
+                                    Logout
+                                </span>
+                            </button>
+                        }
                         <button onClick={toggleDarkMode}
                             className="h-10 w-10 mr-2 sm:mr-4 rounded-lg p-1 cursor-pointer">
                             <svg className="fill-white block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
@@ -40,15 +55,6 @@ const Header = () => {
                                     fillRule="evenodd" clipRule="evenodd"></path>
                             </svg>
                         </button>
-
-                        {isLoggedIn &&
-                            <button onClick={logout}>
-                                <span className="hidden sm:block text-sm 2xl:text-base font-medium px-4 py-2.5 rounded-md text-primary bg-white transition hover:bg-[#7E21D4] hover:text-white cursor-pointer">
-                                    Logout
-                                </span>
-                            </button>
-                        }
-
                     </div>
                 </div>
             </div>

@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from "react";
 function DropdownComponent({
     name = "Dropdown",
     options = [],
-    selectedValue = "",
+    isLabel = true,
+    selectedValue,
     onChange = () => { },
     showSearch = false,
     label = "Select Option"
@@ -35,16 +36,17 @@ function DropdownComponent({
         }
     }, [searchTerm, options]);
 
- const handleSelect = (value) => {
-    const selectedOption = options.find(opt => opt.value === value);
-    onChange(selectedOption); 
-    setIsOpen(false);
-};
+    const handleSelect = (value) => {
+        onChange(value);
+        setIsOpen(false);
+    };
 
     return (
         <div>
-            <label className="block text-base font-medium mb-1 dark:text-white text-gray-900">{label}</label>
-            <details ref={dropdownRef} open={isOpen}>
+            {isLabel &&
+                <label className="block text-base font-medium mb-1 dark:text-white text-gray-900">{label}</label>
+            }
+            <details ref={dropdownRef} open={isOpen} className="relative">
                 <summary
                     onClick={(e) => {
                         e.preventDefault();
@@ -53,16 +55,18 @@ function DropdownComponent({
                     className="cursor-pointer py-2.5 border border-[#D0D5DD] dark:border-gray-200 rounded-lg text-gray-900 dark:text-white dark:bg-dark-background flex justify-between items-center px-4 focus:outline-none"
                 >
                     <span>
-                        {selectedValue
-                            ? selectedValue.label || "Select tag"
-                            : "Select tag"}
+                        {
+                            options.find(opt => opt.value === selectedValue)?.label ||
+                            selectedValue ||
+                            `Select ${name}`
+                        }
                     </span>
                     <span style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0)" }}>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentcolor"><path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" /></svg>
                     </span>
                 </summary>
 
-                <div className="border border-[#D0D5DD] rounded-lg py-2 mt-2 max-h-[200px] overflow-y-auto dark:bg-dark-background dark:border-gray-200 dark:text-white">
+                <div className="border border-[#D0D5DD] rounded-lg py-2 mt-2 max-h-[200px] absolute w-full top-11 bg-white dark:bg-dark-background shadow-md overflow-y-auto dark:border-gray-200 dark:text-white">
                     {showSearch && (
                         <input
                             type="text"
@@ -77,7 +81,7 @@ function DropdownComponent({
                         {filteredOptions.map((item) => (
                             <li
                                 key={item.value}
-                                className="p-2 w-full hover:bg-background-hover cursor-pointer dark:text-white dark:bg-dark-background"
+                                className="p-2 w-full hover:bg-background-hover cursor-pointer dark:text-white dark:bg-dark-background text-base"
                                 onClick={() => handleSelect(item.value)}
                             >
                                 {item.label}
