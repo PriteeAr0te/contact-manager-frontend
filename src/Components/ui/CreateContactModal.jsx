@@ -85,13 +85,13 @@ const CreateContactModal = ({ isOpen, setIsOpen }) => {
 
         const payload = new FormData();
         payload.append('name', formData.name);
-        payload.append('email', formData.email);    
+        payload.append('email', formData.email);
         payload.append('phone', formData.phone);
         payload.append('address', formData.address);
         payload.append('isFavorite', formData.isFavorite);
         payload.append('notes', formData.notes);
-        payload.append('tags', JSON.stringify(formData.tags));
-        if(profilePhoto?.file) {
+        payload.append('tags', formData.tags[0]);
+        if (profilePhoto?.file) {
             payload.append('profilePicture', profilePhoto.file);
         }
 
@@ -131,8 +131,11 @@ const CreateContactModal = ({ isOpen, setIsOpen }) => {
             <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
             <div className="fixed inset-0 flex items-center justify-center p-4">
                 <DialogPanel className="w-full h-full sm:max-w-xl rounded-xl bg-white dark:bg-dark-background p-6 shadow-lg min-h-[100vh-30px] scrollbar overflow-y-scroll" id="style-7">
-                    <DialogTitle className="text-lg font-bold dark:text-white text-gray-800 mb-4" >
-                        Create New Contact
+                    <DialogTitle className="text-lg font-bold flex justify-between items-center dark:text-white text-gray-800 mb-4" >
+                        <span>Create New Contact</span>
+                        <div className="cursor-pointer text-gray-800 p-1 hover:bg-gray-50 rounded-lg" onClick={() => setIsOpen(false)}>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentcolor"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" /></svg>
+                        </div>
                     </DialogTitle>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
@@ -186,7 +189,7 @@ const CreateContactModal = ({ isOpen, setIsOpen }) => {
                             <ProfilePhotoUpload
                                 value={profilePhoto?.previewUrl}
                                 onChange={(file, previewUrl) => {
-                                    setProfilePhoto({file, previewUrl});
+                                    setProfilePhoto({ file, previewUrl });
                                     setFormData(prev => ({
                                         ...prev,
                                         profilePicture: file

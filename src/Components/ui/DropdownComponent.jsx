@@ -35,10 +35,12 @@ function DropdownComponent({
         }
     }, [searchTerm, options]);
 
-    const handleSelect = (value) => {
-        onChange(value);
-        setIsOpen(false);
-    };
+ const handleSelect = (value) => {
+    const selectedOption = options.find(opt => opt.value === value);
+    onChange(selectedOption); 
+    setIsOpen(false);
+};
+
     return (
         <div>
             <label className="block text-base font-medium mb-1 dark:text-white text-gray-900">{label}</label>
@@ -52,10 +54,10 @@ function DropdownComponent({
                 >
                     <span>
                         {selectedValue
-                            ? options.find(o => o.value === selectedValue)?.label || "Select tag"
+                            ? selectedValue.label || "Select tag"
                             : "Select tag"}
                     </span>
-                    <span style={{ transform: isOpen ? "rotate(0)" : "rotate(180deg)" }}>
+                    <span style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0)" }}>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentcolor"><path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" /></svg>
                     </span>
                 </summary>

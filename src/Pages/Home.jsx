@@ -72,7 +72,7 @@ const Home = () => {
         <div className="flex sm:flex-row flex-col gap-y-3 justify-center items-center sm:justify-between mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold text-center dark:text-white flex-1">Contact Manager</h1>
           <button
-            className={`flex w-fit cursor-pointer justify-center rounded-md bg-indigo-600 px-3 py-1.5 font-semibold text-white hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
+            className={`flex w-fit cursor-pointer justify-center rounded-md bg-indigo-600 px-3 py-1.5 font-semibold text-white hover:bg-indigo-500 focus:border-0 focus:outline-none`}
             onClick={() => setIsOpen(true)}
           >
             Create Contact
@@ -86,20 +86,20 @@ const Home = () => {
             {contacts.map((contact) => (
               <li key={contact._id} className="border border-light dark:border-gray-100 rounded-lg p-4 shadow-sm flex sm:justify-between justify-center sm:flex-row flex-col gap-y-4 items-center">
                 <div>
-                  <p className="font-semibold text-lg dark:text-gray-100">{contact.name}</p>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm">{contact.email}</p>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm">{contact.phone}</p>
+                  <p className="font-semibold text-gray-800 text-lg dark:text-gray-100 capitalize">{contact.name}</p>
+                  <p className="text-gray-600 dark:text-gray-400">{contact.email}</p>
+                  <p className="text-gray-600 dark:text-gray-400">{contact.phone}</p>
                 </div>
                 <div className="space-x-2 sm:w-fit w-full text-right">
                   <button
                     onClick={() => handleEdit(contact._id)}
-                    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 focus:border-0 focus:outline-none"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDelete(contact._id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 focus:border-0 focus:outline-none"
                   >
                     Delete
                   </button>

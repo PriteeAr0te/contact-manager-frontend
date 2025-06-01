@@ -15,7 +15,7 @@ const CheckboxComponent = ({name, checked, onChange, id, label}) => {
                 />
                 <div className="w-5 h-5 rounded border border-primary peer-checked:bg-indigo-600 peer-checked:border-indigo-600 flex items-center justify-center">
                     <svg
-                        className="w-3 h-3 text-white hidden peer-checked:block"
+                        className="w-3 h-3 text-indigo-600 hidden peer-checked:text-primary peer-checked:block"
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2"
