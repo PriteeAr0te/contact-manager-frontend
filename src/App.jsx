@@ -5,6 +5,7 @@ import Login from './Pages/Login'
 import Home from './Pages/Home'
 import Layout from './Components/layout/Layout'
 import CreateContact from './Pages/CreateContact'
+import PrivateRoute from './PrivateRoute'
 
 const noLayoutRoutes = ["/login", "/register"];
 
@@ -23,7 +24,11 @@ function App() {
     <>
       <Layout>
         <Routes>
-          <Route path='/' element={<Home />} />
+          <Route path='/' element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          } />
           <Route path='/create-contact' element={<CreateContact />} />
         </Routes>
       </Layout>

@@ -2,7 +2,7 @@ import InputComponent from "../Components/ui/InputComponent";
 import ButtonComponent from "../Components/ui/ButtonComponent";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Hookes/useAuth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import API from "../lib/api";
 import { Slide, toast, ToastContainer } from "react-toastify";
 
@@ -18,10 +18,11 @@ const Login = () => {
     password: ''
   });
 
+ useEffect(() => {
   if (isLoggedIn) {
     navigate("/");
-    return null;
   }
+}, [isLoggedIn, navigate]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
