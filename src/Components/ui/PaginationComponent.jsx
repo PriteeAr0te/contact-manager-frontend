@@ -30,7 +30,7 @@ export default function PaginationComponent({ currentPage, totalPages, onPageCha
                             <button
                                 key={page}
                                 onClick={() => onPageChange(page)}
-                                className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ring-1 ring-inset text-gray-800 dark:text-gray-400 ring-gray-300 hover:bg-gray-50 ${page === currentPage
+                                className={`relative cursor-pointer inline-flex items-center px-4 py-2 text-sm font-semibold ring-1 ring-inset text-gray-800 dark:text-gray-400 ring-gray-300 hover:bg-indigo-500 hover:text-white ${page === currentPage
                                     ? 'z-10 bg-indigo-600 text-white dark:text-white hover:text-gray-800'
                                     : 'text-gray-900'
                                     }`}

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import API from '../lib/api';
 import EditContactModal from '../Components/ui/EditContactModal';
-import { Slide, toast, ToastContainer } from 'react-toastify';
+import { Slide, ToastContainer } from 'react-toastify';
 import DropdownComponent from '../Components/ui/DropdownComponent';
 import PaginationComponent from '../Components/ui/PaginationComponent';
+import ContactStats from '../Components/ui/ContactStats';
+import DeleteContactModal from '../Components/ui/DeleteContactModal';
+import ExportCSV from '../Components/ui/ExportCSV';
 
 const sortOptions = [
   { label: "Name (A-Z)", value: JSON.stringify({ sortBy: "name", sortOrder: "asc" }) },
@@ -24,9 +27,8 @@ const Home = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [sort, setSort] = useState({ sortBy: "name", sortOrder: "asc" });
-  const [totalContacts, setTotalContacts] = useState(0);
-  const [totalFavorites, setTotalFavorites] = useState(0);
-  const [totalTags, setTotalTags] = useState(0);
+  const [isDeleteModal, setIsDeleteModal] = useState(false);
+  const [selectedContactId, setSelectedContactId] = useState(null);
 
   useEffect(() => {
     const delayBounce = setTimeout(() => {
@@ -79,24 +81,6 @@ const Home = () => {
           },
         });
         setContacts(response.data);
-
-        
-      console.log("contacts :", response.data)
-
-      setTotalContacts(response.data.contacts.length);
-
-      const favorites = contacts.filter(contact => contact.isFavorite);
-      setTotalFavorites(favorites.length);
-
-      const tagSet = new Set();
-      contacts.forEach(contact => {
-        if (Array.isArray(contact.tags)) {
-          contact.tags.forEach(tag => tagSet.add(tag.toLowerCase()));
-        }
-      });
-      setTotalTags(tagSet.size);
-
-
       } catch (err) {
         console.log("Failed to fetch contacts: ", err);
       }
@@ -124,49 +108,29 @@ const Home = () => {
     }
   }
 
-  const handleDelete = async (id) => {
-    if (confirm("Are you sure you want to delete this contact?")) {
-      try {
-
-        const token = localStorage.getItem('token')
-        await API.delete(`/contacts/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        fetchContacts();
-        toast.success("Contact deleted successfully")
-      } catch (err) {
-        console.log("Deletion failed", err);
-      }
-    }
-  }
-
-  // console.log("contact length:", totalContacts);
+  const openDeleteModal = (id) => {
+    setSelectedContactId(id);
+    setIsDeleteModal(true);
+  };
 
   return (
     <>
+      <DeleteContactModal
+        isDeleteModal={isDeleteModal}
+        setIsDeleteModal={setIsDeleteModal}
+        contactId={selectedContactId}
+        fetchContacts={fetchContacts}
+      />
       <EditContactModal isOpen={isOpenEdit} setIsOpen={setIsOpenEdit} contact={selectedContact} />
+      <ToastContainer position="top-right" transition={Slide} className="z-50" autoClose={6000} closeButton={true} pauseOnHover={true} />
       <div className="px-4 w-full min-h-screen mx-auto py-12 xl:px-32 2xl:px-40 bg-white dark:bg-dark-background overflow-x-hidden">
         <div className="w-fit sm:w-auto flex justify-end gap-4 mb-4">
-          <div className="grid gap-4 text-sm text-white bg-purple-900 p-4 py-2 rounded-lg shadow-md">
-            <div className="flex gap-3 items-center">
-              <span className="text-xl font-bold">{totalContacts}</span>
-              <span>Total Contacts</span>
-            </div>
-            {/* <div className="flex flex-col items-center">
-              <span className="text-xl font-bold">{totalFavorites}</span>
-              <span>Favorites</span>
-            </div>
-            <div className="flex flex-col items-center">
-              <span className="text-xl font-bold">{totalTags}</span>
-              <span>Unique Tags</span>
-            </div> */}
-          </div>
+          <ExportCSV />
+          <ContactStats />
         </div>
 
-        <div className="flex sm:flex-row flex-col gap-y-3 justify-between items-center sm:justify-between mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-left dark:text-white flex-1">Contact Manager</h1>
+        <div className="flex sm:flex-row flex-col gap-y-3 justify-end items-center sm:justify-end mb-6">
+          {/* <h1 className="text-2xl sm:text-3xl font-bold text-left dark:text-white flex-1">Contact Manager</h1> */}
           <div className='flex gap-2 items-start'>
             <button
               onClick={() => setIsFavorite(prev => !prev)}
@@ -278,12 +242,12 @@ const Home = () => {
                 <div className="space-x-2 sm:w-fit w-full text-right">
                   <button
                     onClick={() => handleEdit(contact._id)}
-                    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 focus:border-0 focus:outline-none"
+                    className="bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-500 focus:border-0 focus:outline-none"
                   >
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDelete(contact._id)}
+                    onClick={() => openDeleteModal(contact._id)}
                     className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 focus:border-0 focus:outline-none"
                   >
                     Delete
