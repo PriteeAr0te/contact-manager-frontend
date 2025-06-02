@@ -121,7 +121,8 @@ const Register = () => {
                 type="password"
                 isPassword={true}
                 onChange={handleChange}
-                required />
+                required
+              />
               {formErrors.password && <p className="text-red-600 text-sm mt-2">{formErrors.password}</p>}
             </div>
 
@@ -129,7 +130,7 @@ const Register = () => {
 
             <div className="flex items-center justify-center w-full">
               <ButtonComponent
-              width="w-full"
+                width="w-full"
                 label="Register"
                 type="submit"
               />

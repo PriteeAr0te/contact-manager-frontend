@@ -2,6 +2,7 @@ import React, { useRef } from 'react'
 
 const ProfilePhotoUpload = ({ value, onChange }) => {
     const fileInputRef = useRef(null);
+    
 
     const handleFileChange = (e) => {
         const file = e.target.files?.[0];

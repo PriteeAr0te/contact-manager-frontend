@@ -38,6 +38,8 @@ const EditContactModal = ({ isOpen, setIsOpen, contact }) => {
         previewUrl: contact?.profilePicture || null,
     })
 
+    const VITE_BASE_URL = "https://contact-manager-backend-rho.vercel.app";
+
     const [formData, setFormData] = useState(getInitialFormData(contact));
 
     useEffect(() => {
@@ -45,7 +47,9 @@ const EditContactModal = ({ isOpen, setIsOpen, contact }) => {
             setFormData(getInitialFormData(contact));
             setProfilePhoto({
                 file: null,
-                previewUrl: contact?.profilePicture || null,
+                previewUrl: contact?.profilePicture
+                    ? `${VITE_BASE_URL}${contact.profilePicture}`
+                    : null,
             });
         }
     }, [contact]);
@@ -109,8 +113,6 @@ const EditContactModal = ({ isOpen, setIsOpen, contact }) => {
         payload.append('tags', formData.tags[0] || '');
         if (profilePhoto.file) {
             payload.append('profilePicture', profilePhoto.file);
-        } else {
-            payload.append('profilePicture', contact.profilePicture);
         }
 
         for (let [key, val] of payload.entries()) {
@@ -121,7 +123,7 @@ const EditContactModal = ({ isOpen, setIsOpen, contact }) => {
             const response = await API.put(`/contacts/${contact._id}`, payload);
 
             console.log("updated data: ", response.data);
-            
+
             if (response.status === 200 && response.data) {
                 await toast.success("Contact updated successfully!");
                 setIsOpen(false);
@@ -145,7 +147,7 @@ const EditContactModal = ({ isOpen, setIsOpen, contact }) => {
                 <DialogPanel className="w-full h-full sm:max-w-xl rounded-xl bg-white dark:bg-dark-background p-6 shadow-lg min-h-[100vh-30px] scrollbar overflow-y-scroll" id="style-7">
                     <DialogTitle className="text-lg font-bold flex justify-between items-center dark:text-white text-gray-800 mb-4">
                         <span>Update Contact</span>
-                        <div className="cursor-pointer text-gray-800 p-1 hover:bg-gray-50 rounded-lg" onClick={() => setIsOpen(false)}>
+                        <div className="cursor-pointer text-gray-800 dark:text-gray-400 p-1 hover:bg-gray-50 dark:hover:text-gray-800  rounded-lg" onClick={() => setIsOpen(false)}>
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentcolor"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" /></svg>
                         </div>
                     </DialogTitle>

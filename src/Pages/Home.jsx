@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import API from '../lib/api';
 import EditContactModal from '../Components/ui/EditContactModal';
-import { Slide, ToastContainer } from 'react-toastify';
+import { Slide, toast, ToastContainer } from 'react-toastify';
 import DropdownComponent from '../Components/ui/DropdownComponent';
 import PaginationComponent from '../Components/ui/PaginationComponent';
 import ContactStats from '../Components/ui/ContactStats';
 import DeleteContactModal from '../Components/ui/DeleteContactModal';
 import ExportCSV from '../Components/ui/ExportCSV';
+import { Link } from 'react-router-dom';
 
 const sortOptions = [
   { label: "Name (A-Z)", value: JSON.stringify({ sortBy: "name", sortOrder: "asc" }) },
@@ -30,6 +31,8 @@ const Home = () => {
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const [selectedContactId, setSelectedContactId] = useState(null);
 
+  const VITE_BASE_URL = "https://contact-manager-backend-rho.vercel.app";
+
   useEffect(() => {
     const delayBounce = setTimeout(() => {
       fetchContacts(currentPage);
@@ -41,7 +44,7 @@ const Home = () => {
     try {
       const token = localStorage.getItem('token');
 
-      const params = { page, limit: 3, sortBy: sort.sortBy, sortOrder: sort.sortOrder };
+      const params = { page, limit: 5, sortBy: sort.sortBy, sortOrder: sort.sortOrder };
 
       if (searchTerm) params.search = searchTerm;
       if (selectedTag) params.tag = selectedTag;
@@ -113,6 +116,19 @@ const Home = () => {
     setIsDeleteModal(true);
   };
 
+  const copyToClipboard = (value) => {
+    navigator.clipboard.writeText(value);
+    toast.success("Copied to clipboard!");
+  };
+
+  const getInitials = (name) => {
+    return name
+      ?.split(" ")
+      .map((word) => word.charAt(0).toUpperCase())
+      .join("")
+      .slice(0, 2);
+  };
+
   return (
     <>
       <DeleteContactModal
@@ -124,14 +140,13 @@ const Home = () => {
       <EditContactModal isOpen={isOpenEdit} setIsOpen={setIsOpenEdit} contact={selectedContact} />
       <ToastContainer position="top-right" transition={Slide} className="z-50" autoClose={6000} closeButton={true} pauseOnHover={true} />
       <div className="px-4 w-full min-h-screen mx-auto py-12 xl:px-32 2xl:px-40 bg-white dark:bg-dark-background overflow-x-hidden">
-        <div className="w-fit sm:w-auto flex justify-end gap-4 mb-4">
+        <div className="w-fit sm:w-auto flex flex-wrap justify-end gap-4 mb-4">
           <ExportCSV />
           <ContactStats />
         </div>
 
         <div className="flex sm:flex-row flex-col gap-y-3 justify-end items-center sm:justify-end mb-6">
-          {/* <h1 className="text-2xl sm:text-3xl font-bold text-left dark:text-white flex-1">Contact Manager</h1> */}
-          <div className='flex gap-2 items-start'>
+          <div className='flex flex-wrap gap-2 items-start'>
             <button
               onClick={() => setIsFavorite(prev => !prev)}
               className="ml-4 p-2"
@@ -233,11 +248,67 @@ const Home = () => {
         ) : (
           <ul className="space-y-4">
             {contacts?.contacts?.map((contact) => (
-              <li key={contact._id} className="border border-light dark:border-gray-100 rounded-lg p-4 shadow-sm flex sm:justify-between justify-center sm:flex-row flex-col gap-y-4 items-center">
+              <li key={contact._id} className="border border-light dark:border-gray-100 rounded-lg p-4 shadow-sm flex sm:justify-between justify-center sm:flex-row flex-col gap-y-4 items-center hover:bg-gray-50 dark:hover:bg-dark-background">
                 <div>
-                  <p className="font-semibold text-gray-800 text-lg dark:text-gray-100 capitalize">{contact.name}</p>
-                  <p className="text-gray-600 dark:text-gray-400">{contact.email}</p>
-                  <p className="text-gray-600 dark:text-gray-400">{contact.phone}</p>
+                  <div className='flex items-center gap-x-4 gap-2 mb-3'>
+                    <div className="w-10 h-10 rounded-full overflow-hidden bg-indigo-600 text-white text-xl flex items-center justify-center font-bold">
+                      {console.log("profile: ", contact.profilePicture)}
+                      {contact.profilePicture ? (
+                        <img
+                          src={`${VITE_BASE_URL}${contact.profilePicture}`}
+                          alt={contact.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        getInitials(contact.name)
+                      )}
+                    </div>
+                    <Link to={`/contact/${contact._id}`} className="font-semibold text-indigo-600 text-lg dark:text-gray-100 capitalize hover:text-indigo-600">{contact.name}
+                    </Link>
+                    {contact.isFavorite && (
+                      <span title="Favorite Contact" className="text-yellow-500">
+                        ⭐
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-400 mb-1 flex gap-x-4 gap-2 items-center">
+                    <span>{contact.email}</span>
+                    <button
+                      onClick={() => copyToClipboard(contact.email)}
+                      className="p-1 hover:scale-110 transition-transform focus:outline-none"
+                      title="Copy Phone"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="20px"
+                        viewBox="0 -960 960 960"
+                        width="20px"
+                        fill="currentColor"
+                        className="text-gray-500 dark:text-gray-300"
+                      >
+                        <path d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0 33-23.5 56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z" />
+                      </svg>
+                    </button>
+                  </p>
+                  <p className="text-gray-600 dark:text-gray-400 flex gap-x-4 gap-2">
+                    <span>{contact.phone}</span>
+                    <button
+                      onClick={() => copyToClipboard(contact.phone)}
+                      className="p-1 hover:scale-110 transition-transform focus:outline-none"
+                      title="Copy Phone"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="20px"
+                        viewBox="0 -960 960 960"
+                        width="20px"
+                        fill="currentColor"
+                        className="text-gray-500 dark:text-gray-300"
+                      >
+                        <path d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0 33-23.5 56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z" />
+                      </svg>
+                    </button>
+                  </p>
                 </div>
                 <div className="space-x-2 sm:w-fit w-full text-right">
                   <button
