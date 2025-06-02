@@ -52,7 +52,7 @@ function DropdownComponent({
                         e.preventDefault();
                         setIsOpen((prev) => !prev);
                     }}
-                    className="cursor-pointer py-2.5 border border-[#D0D5DD] dark:border-gray-200 rounded-lg text-gray-900 dark:text-white dark:bg-dark-background flex justify-between items-center px-4 focus:outline-1 focus:outline-indigo-600"
+                    className="cursor-pointer py-2.5 border border-[#D0D5DD] dark:border-gray-200 dark:focus:border-0 rounded-lg text-gray-900 dark:text-white dark:bg-dark-background flex justify-between items-center px-4 focus:outline-1 focus:outline-indigo-600"
                 >
                     <span>
                         {

@@ -5,6 +5,13 @@ import { Slide, toast, ToastContainer } from 'react-toastify';
 import DropdownComponent from '../Components/ui/DropdownComponent';
 import PaginationComponent from '../Components/ui/PaginationComponent';
 
+const sortOptions = [
+  { label: "Name (A-Z)", value: JSON.stringify({ sortBy: "name", sortOrder: "asc" }) },
+  { label: "Name (Z-A)", value: JSON.stringify({ sortBy: "name", sortOrder: "desc" }) },
+  { label: "Newest First", value: JSON.stringify({ sortBy: "createdAt", sortOrder: "desc" }) },
+  { label: "Oldest First", value: JSON.stringify({ sortBy: "createdAt", sortOrder: "asc" }) },
+];
+
 const Home = () => {
   const [contacts, setContacts] = useState([]);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
@@ -16,23 +23,23 @@ const Home = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-
-  const handleTagChange = (selectedOption) => {
-    setSelectedTag(selectedOption);
-  };
+  const [sort, setSort] = useState({ sortBy: "name", sortOrder: "asc" });
+  const [totalContacts, setTotalContacts] = useState(0);
+  const [totalFavorites, setTotalFavorites] = useState(0);
+  const [totalTags, setTotalTags] = useState(0);
 
   useEffect(() => {
     const delayBounce = setTimeout(() => {
       fetchContacts(currentPage);
     }, 500);
     return () => clearTimeout(delayBounce);
-  }, [searchTerm, selectedTag, isFavorite, currentPage]);
+  }, [searchTerm, selectedTag, isFavorite, currentPage, sort.sortBy, sort.sortOrder]);
 
-  const fetchContacts = async (page = 1) => {
+  const fetchContacts = async (page) => {
     try {
       const token = localStorage.getItem('token');
 
-      const params = { page, limit: 5 };
+      const params = { page, limit: 3, sortBy: sort.sortBy, sortOrder: sort.sortOrder };
 
       if (searchTerm) params.search = searchTerm;
       if (selectedTag) params.tag = selectedTag;
@@ -47,8 +54,7 @@ const Home = () => {
       const data = response.data;
       setContacts(data);
       setTotalPages(data.totalPages);
-      setCurrentPage(data.page);
-      console.log("totalpages in fetchContacts:", totalPages);
+      setCurrentPage(data.currentPage);
 
       if (searchTerm.length > 0) {
         const names = data.map((contact) => contact.name);
@@ -73,12 +79,34 @@ const Home = () => {
           },
         });
         setContacts(response.data);
+
+        
+      console.log("contacts :", response.data)
+
+      setTotalContacts(response.data.contacts.length);
+
+      const favorites = contacts.filter(contact => contact.isFavorite);
+      setTotalFavorites(favorites.length);
+
+      const tagSet = new Set();
+      contacts.forEach(contact => {
+        if (Array.isArray(contact.tags)) {
+          contact.tags.forEach(tag => tagSet.add(tag.toLowerCase()));
+        }
+      });
+      setTotalTags(tagSet.size);
+
+
       } catch (err) {
         console.log("Failed to fetch contacts: ", err);
       }
     };
     fetchInitialContacts();
   }, []);
+
+  const handleTagChange = (selectedOption) => {
+    setSelectedTag(selectedOption);
+  };
 
   const handleEdit = async (id) => {
     try {
@@ -114,12 +142,29 @@ const Home = () => {
     }
   }
 
-  console.log("contacts:", contacts);
+  // console.log("contact length:", totalContacts);
 
   return (
     <>
       <EditContactModal isOpen={isOpenEdit} setIsOpen={setIsOpenEdit} contact={selectedContact} />
       <div className="px-4 w-full min-h-screen mx-auto py-12 xl:px-32 2xl:px-40 bg-white dark:bg-dark-background overflow-x-hidden">
+        <div className="w-fit sm:w-auto flex justify-end gap-4 mb-4">
+          <div className="grid gap-4 text-sm text-white bg-purple-900 p-4 py-2 rounded-lg shadow-md">
+            <div className="flex gap-3 items-center">
+              <span className="text-xl font-bold">{totalContacts}</span>
+              <span>Total Contacts</span>
+            </div>
+            {/* <div className="flex flex-col items-center">
+              <span className="text-xl font-bold">{totalFavorites}</span>
+              <span>Favorites</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="text-xl font-bold">{totalTags}</span>
+              <span>Unique Tags</span>
+            </div> */}
+          </div>
+        </div>
+
         <div className="flex sm:flex-row flex-col gap-y-3 justify-between items-center sm:justify-between mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold text-left dark:text-white flex-1">Contact Manager</h1>
           <div className='flex gap-2 items-start'>
@@ -178,6 +223,7 @@ const Home = () => {
                 </ul>
               )}
             </div>
+
             <div className="mb-0 w-full sm:w-[200px]">
               <DropdownComponent
                 isLabel={false}
@@ -192,7 +238,6 @@ const Home = () => {
                 onChange={handleTagChange}
                 showSearch={false}
               />
-              {console.log("tag filter", selectedTag)}
             </div>
             {selectedTag && (
               <button
@@ -202,6 +247,20 @@ const Home = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentcolor"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" /></svg>
               </button>
             )}
+
+            <div className="mb-0 w-full sm:w-[200px]">
+              <DropdownComponent
+                name="Sort"
+                label="Sort Contacts"
+                isLabel={false}
+                options={sortOptions}
+                selectedValue={JSON.stringify(sort)}
+                onChange={(val) => {
+                  const parsed = JSON.parse(val);
+                  setSort(parsed);
+                }}
+              />
+            </div>
           </div>
         </div>
 
@@ -234,16 +293,15 @@ const Home = () => {
             ))}
           </ul>
         )}
+        <div className='mt-14 bg-transparent'>
+          <PaginationComponent
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
+        </div>
       </div>
 
-      <div>
-        {console.log("pages: ", totalPages, "current page: ", currentPage)}
-        <PaginationComponent
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={(page) => setCurrentPage(page)}
-        />
-      </div>
 
     </>
   );

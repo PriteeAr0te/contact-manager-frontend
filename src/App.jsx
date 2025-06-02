@@ -11,7 +11,6 @@ const noLayoutRoutes = ["/login", "/register"];
 function App() {
   const location = useLocation();
   const isNoRoute = noLayoutRoutes.includes(location.pathname);
-  console.log(isNoRoute);
 
   return isNoRoute ? (
     <>

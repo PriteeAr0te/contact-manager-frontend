@@ -230,7 +230,6 @@ const EditContactModal = ({ isOpen, setIsOpen, contact }) => {
                                     }))
                                 }}
                             />
-                            {console.log("edit tag: ", formData.tags[0])}
                         </div>
 
                         <div>
