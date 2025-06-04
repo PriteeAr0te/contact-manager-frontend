@@ -38,8 +38,6 @@ const EditContactModal = ({ isOpen, setIsOpen, contact }) => {
         previewUrl: contact?.profilePicture || null,
     })
 
-    const VITE_BASE_URL = "https://contact-manager-backend-rho.vercel.app";
-
     const [formData, setFormData] = useState(getInitialFormData(contact));
 
     useEffect(() => {
@@ -47,9 +45,7 @@ const EditContactModal = ({ isOpen, setIsOpen, contact }) => {
             setFormData(getInitialFormData(contact));
             setProfilePhoto({
                 file: null,
-                previewUrl: contact?.profilePicture
-                    ? `${VITE_BASE_URL}${contact.profilePicture}`
-                    : null,
+                previewUrl: contact?.profilePicture || null,
             });
         }
     }, [contact]);
@@ -102,7 +98,6 @@ const EditContactModal = ({ isOpen, setIsOpen, contact }) => {
         }
         console.log("formData edit: ", formData);
         setFormErrors({});
-        // setError('');
         const payload = new FormData();
         payload.append('name', formData.name);
         payload.append('email', formData.email);

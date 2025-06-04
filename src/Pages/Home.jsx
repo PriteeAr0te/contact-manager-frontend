@@ -31,8 +31,6 @@ const Home = () => {
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const [selectedContactId, setSelectedContactId] = useState(null);
 
-  const VITE_BASE_URL = "https://contact-manager-backend-rho.vercel.app";
-
   useEffect(() => {
     const delayBounce = setTimeout(() => {
       fetchContacts(currentPage);
@@ -255,7 +253,7 @@ const Home = () => {
                       {console.log("profile: ", contact.profilePicture)}
                       {contact.profilePicture ? (
                         <img
-                          src={`${VITE_BASE_URL}${contact.profilePicture}`}
+                          src={contact.profilePicture}
                           alt={contact.name}
                           className="w-full h-full object-cover"
                         />

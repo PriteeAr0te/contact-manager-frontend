@@ -10,7 +10,6 @@ const ContactDetails = () => {
     const [contact, setContact] = useState(null);
     const [error, setError] = useState(null);
     
-  const VITE_BASE_URL = "https://contact-manager-backend-rho.vercel.app";
 
     const copyToClipboard = (value) => {
         navigator.clipboard.writeText(value);
@@ -73,7 +72,7 @@ const ContactDetails = () => {
                                     {console.log("profile: ", contact.profilePicture)}
                                     {contact.profilePicture ? (
                                         <img
-                                            src={`${VITE_BASE_URL}${contact.profilePicture}`}
+                                            src={contact.profilePicture}
                                             alt={contact.name}
                                             className="w-full h-full object-cover"
                                         />
