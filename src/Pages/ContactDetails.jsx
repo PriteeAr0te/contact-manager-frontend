@@ -69,7 +69,7 @@ const ContactDetails = () => {
                         <div className="max-w-xl mx-auto bg-white dark:bg-gray-900 rounded-xl p-6 shadow-md border border-gray-200 dark:border-gray-700 mb-8">
                             <div className="flex items-center gap-4 mb-6">
                                 <div className="w-14 h-14 rounded-full overflow-hidden bg-indigo-600 text-white text-xl flex items-center justify-center font-bold">
-                                    {console.log("profile: ", contact.profilePicture)}
+                                    {/* {console.log("profile previous: ", contact.profilePicture)} */}
                                     {contact.profilePicture ? (
                                         <img
                                             src={contact.profilePicture}

@@ -7,6 +7,8 @@ import CheckboxComponent from '../Components/ui/CheckboxComponent';
 import DropdownComponent from '../Components/ui/DropdownComponent';
 import ButtonComponent from '../Components/ui/ButtonComponent';
 import API from '../lib/api';
+import { uploadImageToCloudinary } from '../utils/uploadImageToCloudinary';
+import { Navigate } from 'react-router-dom';
 
 
 const options = [
@@ -19,6 +21,7 @@ const options = [
 
 const CreateContact = () => {
     const [error, setError] = useState('');
+    const navigate = Navigate()
     const [formErrors, setFormErrors] = useState({});
     const [profilePhoto, setProfilePhoto] = useState(null);
     const [formData, setFormData] = useState({
@@ -83,27 +86,32 @@ const CreateContact = () => {
         setFormErrors({});
         setError('');
 
-        const payload = new FormData();
-        payload.append('name', formData.name);
-        payload.append('email', formData.email);
-        payload.append('phone', formData.phone);
-        payload.append('address', formData.address);
-        payload.append('isFavorite', formData.isFavorite);
-        payload.append('notes', formData.notes);
-        payload.append('tags', formData.tags[0] || '');
-        if (profilePhoto?.file) {
-            payload.append('profilePicture', profilePhoto.file);
-        }
+        let imageUrl = '';
+        let publicId = '';
 
         try {
+            if (profilePhoto?.file) {
+                const result = await uploadImageToCloudinary(profilePhoto.file);
+                imageUrl = result.url;
+                publicId = result.public_id;
+            }
+
+            const payload = {
+                ...formData,
+                tags: formData.tags[0] || '',
+                profilePicture: imageUrl,
+                profilePicturePublicId: publicId,
+            }
+
             const response = await API.post("/contacts", payload, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                }
+                // headers: {
+                //     'Content-Type': 'multipart/form-data',
+                // }
             });
             console.log(response);
             if (response.status === 201 && response.data) {
                 await toast.success("Contact created successfully!");
+                navigate("/");
                 setFormData({
                     name: '',
                     email: '',

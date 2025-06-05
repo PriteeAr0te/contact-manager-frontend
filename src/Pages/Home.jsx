@@ -135,7 +135,7 @@ const Home = () => {
         contactId={selectedContactId}
         fetchContacts={fetchContacts}
       />
-      <EditContactModal isOpen={isOpenEdit} setIsOpen={setIsOpenEdit} contact={selectedContact} />
+      <EditContactModal isOpen={isOpenEdit} setIsOpen={setIsOpenEdit} contact={selectedContact} fetchContacts={fetchContacts} currentPage={currentPage} />
       <ToastContainer position="top-right" transition={Slide} className="z-50" autoClose={6000} closeButton={true} pauseOnHover={true} />
       <div className="px-4 w-full min-h-screen mx-auto py-12 xl:px-32 2xl:px-40 bg-white dark:bg-dark-background overflow-x-hidden">
         <div className="w-fit sm:w-auto flex flex-wrap justify-end gap-4 mb-4">
@@ -250,10 +250,10 @@ const Home = () => {
                 <div>
                   <div className='flex items-center gap-x-4 gap-2 mb-3'>
                     <div className="w-10 h-10 rounded-full overflow-hidden bg-indigo-600 text-white text-xl flex items-center justify-center font-bold">
-                      {console.log("profile: ", contact.profilePicture)}
+                      {console.log("profile previous: ", contact.profilePicture)}
                       {contact.profilePicture ? (
                         <img
-                          src={contact.profilePicture}
+                          src={`${contact.profilePicture}?t=${new Date().getTime()}`}
                           alt={contact.name}
                           className="w-full h-full object-cover"
                         />

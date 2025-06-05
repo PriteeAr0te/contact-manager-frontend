@@ -8,6 +8,7 @@ import TextareaComponent from './TextareaComponent'
 import ProfilePhotoUpload from './ProfilePhotoUpload'
 import CheckboxComponent from './CheckboxComponent'
 import DropdownComponent from './DropdownComponent'
+import { uploadImageToCloudinary } from '../../utils/uploadImageToCloudinary'
 
 const options = [
     { label: 'Primary', value: 'Primary' },
@@ -30,7 +31,7 @@ const getInitialFormData = (contact) => ({
     profilePicture: contact?.profilePicture || null,
 });
 
-const EditContactModal = ({ isOpen, setIsOpen, contact }) => {
+const EditContactModal = ({ isOpen, setIsOpen, contact, fetchContacts, currentPage }) => {
     const [error, setError] = useState('');
     const [formErrors, setFormErrors] = useState({});
     const [profilePhoto, setProfilePhoto] = useState({
@@ -39,16 +40,6 @@ const EditContactModal = ({ isOpen, setIsOpen, contact }) => {
     })
 
     const [formData, setFormData] = useState(getInitialFormData(contact));
-
-    useEffect(() => {
-        if (contact) {
-            setFormData(getInitialFormData(contact));
-            setProfilePhoto({
-                file: null,
-                previewUrl: contact?.profilePicture || null,
-            });
-        }
-    }, [contact]);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -88,52 +79,64 @@ const EditContactModal = ({ isOpen, setIsOpen, contact }) => {
         return errors;
     }
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         const errors = validate();
         if (Object.keys(errors).length > 0) {
             setFormErrors(errors);
             return;
         }
-        console.log("formData edit: ", formData);
+
         setFormErrors({});
-        const payload = new FormData();
-        payload.append('name', formData.name);
-        payload.append('email', formData.email);
-        payload.append('phone', formData.phone);
-        payload.append('address', formData.address);
-        payload.append('isFavorite', formData.isFavorite);
-        payload.append('notes', formData.notes);
-        payload.append('tags', formData.tags[0] || '');
-        if (profilePhoto.file) {
-            payload.append('profilePicture', profilePhoto.file);
+        setError('');
+
+        let imageUrl = formData.profilePicture || '';
+        let publicId = formData.profilePicturePublicId || '';
+
+        if (profilePhoto?.file) {
+            const result = await uploadImageToCloudinary(profilePhoto.file);
+            imageUrl = result.url;
+            publicId = result.public_id;
         }
 
-        for (let [key, val] of payload.entries()) {
-            console.log(key, val);
-        }
+        const payload = {
+            ...formData,
+            tags: formData.tags[0] || '',
+            profilePicture: imageUrl,
+            profilePicturePublicId: publicId,
+        };
+
+        console.log("📦 Sending updated contact to backend:", payload);
 
         try {
             const response = await API.put(`/contacts/${contact._id}`, payload);
 
-            console.log("updated data: ", response.data);
-
             if (response.status === 200 && response.data) {
-                await toast.success("Contact updated successfully!");
+                toast.success("Contact updated successfully!");
                 setIsOpen(false);
+                fetchContacts(currentPage);
                 setFormData(getInitialFormData(null));
                 setProfilePhoto({ file: null, previewUrl: null });
             } else {
                 setError("Failed to update contact. Please try again.");
             }
         } catch (err) {
-            console.error("Error updating contact:", err);
+            console.error("❌ Error updating contact:", err);
             setError("Failed to update contact. Please try again.");
-            return;
         }
-        console.log("Contact Updated Successfully");
-    }
+    };
+
+    useEffect(() => {
+        if (contact) {
+            setFormData(getInitialFormData(contact));
+            setProfilePhoto({
+                file: null,
+                previewUrl: contact?.profilePicture || null,
+            });
+        }
+    }, [contact]);
+
 
     return (
         <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-10">
@@ -196,13 +199,13 @@ const EditContactModal = ({ isOpen, setIsOpen, contact }) => {
 
                         <div>
                             <ProfilePhotoUpload
-                                value={profilePhoto?.previewUrl}
+                                value={profilePhoto.previewUrl}
                                 onChange={(file, previewUrl) => {
                                     setProfilePhoto({ file, previewUrl });
                                     setFormData(prev => ({
                                         ...prev,
-                                        profilePicture: file
-                                    }))
+                                        profilePicture: previewUrl,
+                                    }));
                                 }}
                             />
                         </div>
