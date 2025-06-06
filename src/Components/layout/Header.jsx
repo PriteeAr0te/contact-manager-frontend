@@ -2,10 +2,13 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../Hookes/useAuth';
 import Logo from '../../assets/logo.png';
 import useDarkMode from '../../Hookes/useDarkMode';
+import ProfilePicture from '../../../src/assets/profile-pic.jpg'
 
 const Header = () => {
     const [darkMode, toggleDarkMode] = useDarkMode();
     const { logout, isLoggedIn } = useAuth();
+    const user = JSON.parse(localStorage.getItem('user'));
+    console.log("user: ", user.profilePhoto)
 
     return (
         <nav className="bg-dark shadow">
@@ -32,11 +35,11 @@ const Header = () => {
                         </Link>
 
                         {isLoggedIn &&
-                            <button onClick={logout}>
+                            <button onClick={logout} className='tooltip relative group'>
                                 <span className=" text-sm 2xl:text-base font-medium px-4 py-2.5 rounded-md text-primary bg-white transition hover:bg-[#7E21D4] hover:text-white cursor-pointer flex gap-2 items-center">
                                     <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentcolor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" /></svg></span>
-                                    <span className='hidden sm:block'>Logout</span>
                                 </span>
+                                <span className='tooltip-text hidden w-fit px-4 py-1.5 bg-gray-200 dark:bg-dark-background text-primary dark:text-black text-center absolute z-30 group-hover:block'>Logout</span>
                             </button>
                         }
                         <button onClick={toggleDarkMode}
@@ -57,6 +60,13 @@ const Header = () => {
                                 </span>
                             }
                         </button>
+
+                        <Link to='/myprofile'>
+                            <img
+                                src={user.profilePhoto || ProfilePicture}
+                                className='w-10 h-10 rounded-full shadow-md '
+                                alt='Profile Picture' />
+                        </Link>
                     </div>
                 </div>
             </div>

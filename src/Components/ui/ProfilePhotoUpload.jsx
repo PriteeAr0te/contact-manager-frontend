@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 
-const ProfilePhotoUpload = ({ value, onChange }) => {
+const ProfilePhotoUpload = ({ value, onChange, label }) => {
     const fileInputRef = useRef(null);
 
     const handleFileChange = (e) => {
@@ -15,7 +15,7 @@ const ProfilePhotoUpload = ({ value, onChange }) => {
         <>
             <div className="col-span-full">
                 <label htmlFor="photo" className="block text-base font-medium dark:text-white text-gray-900">
-                    Photo
+                    {label ? label : 'Photo'}
                 </label>
                 <div className="mt-2 flex items-center gap-x-3">
                     <div aria-hidden="true" className="size-12 dark:text-gray-300 text-gray-700 border rounded-full place-items-center place-content-center dark:border-gray-300 border-primary">

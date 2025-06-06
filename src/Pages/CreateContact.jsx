@@ -8,7 +8,7 @@ import DropdownComponent from '../Components/ui/DropdownComponent';
 import ButtonComponent from '../Components/ui/ButtonComponent';
 import API from '../lib/api';
 import { uploadImageToCloudinary } from '../utils/uploadImageToCloudinary';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 
 const options = [
@@ -21,7 +21,7 @@ const options = [
 
 const CreateContact = () => {
     const [error, setError] = useState('');
-    const navigate = Navigate()
+    const navigate = useNavigate()
     const [formErrors, setFormErrors] = useState({});
     const [profilePhoto, setProfilePhoto] = useState(null);
     const [formData, setFormData] = useState({

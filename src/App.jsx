@@ -7,6 +7,7 @@ import Layout from './Components/layout/Layout'
 import CreateContact from './Pages/CreateContact'
 import PrivateRoute from './PrivateRoute'
 import ContactDetails from './Pages/ContactDetails'
+import Profile from './Pages/Profile'
 
 const noLayoutRoutes = ["/login", "/register"];
 
@@ -32,6 +33,7 @@ function App() {
           } />
           <Route path='/create-contact' element={<CreateContact />} />
           <Route path='/contact/:id' element={<ContactDetails />} />
+          <Route path='/myprofile' element={<Profile />} />
         </Routes>
       </Layout>
     </>
