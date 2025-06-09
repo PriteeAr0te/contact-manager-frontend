@@ -20,7 +20,6 @@ const ContactStats = () => {
                     },
                 });
                 setStats(response.data);
-                console.log('Contact Stats:', response.data);
 
             } catch (error) {
                 console.error('Error fetching contact stats:', error);

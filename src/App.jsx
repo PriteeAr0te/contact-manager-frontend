@@ -8,12 +8,14 @@ import CreateContact from './Pages/CreateContact'
 import PrivateRoute from './PrivateRoute'
 import ContactDetails from './Pages/ContactDetails'
 import Profile from './Pages/Profile'
+import SharedContactsPage from './Pages/SharedContact'
 
 const noLayoutRoutes = ["/login", "/register"];
 
 function App() {
   const location = useLocation();
   const isNoRoute = noLayoutRoutes.includes(location.pathname);
+  
 
   return isNoRoute ? (
     <>
@@ -34,6 +36,7 @@ function App() {
           <Route path='/create-contact' element={<CreateContact />} />
           <Route path='/contact/:id' element={<ContactDetails />} />
           <Route path='/myprofile' element={<Profile />} />
+          <Route path='/shared-contacts' element={<SharedContactsPage />} />
         </Routes>
       </Layout>
     </>

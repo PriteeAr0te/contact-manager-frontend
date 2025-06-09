@@ -8,6 +8,7 @@ import ContactStats from '../Components/ui/ContactStats';
 import DeleteContactModal from '../Components/ui/DeleteContactModal';
 import ExportCSV from '../Components/ui/ExportCSV';
 import { Link } from 'react-router-dom';
+import ShareContactModal from '../Components/ui/ShareContactModal';
 
 const sortOptions = [
   { label: "Name (A-Z)", value: JSON.stringify({ sortBy: "name", sortOrder: "asc" }) },
@@ -30,6 +31,8 @@ const Home = () => {
   const [sort, setSort] = useState({ sortBy: "name", sortOrder: "asc" });
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const [selectedContactId, setSelectedContactId] = useState(null);
+  const [shareModal, setShareModal] = useState(false);
+  const [contactId, setContactId] = useState('');
 
   useEffect(() => {
     const delayBounce = setTimeout(() => {
@@ -56,11 +59,12 @@ const Home = () => {
       });
       const data = response.data;
       setContacts(data);
+      console.log("Contact Data: ", data)
       setTotalPages(data.totalPages);
       setCurrentPage(data.currentPage);
 
       if (searchTerm.length > 0) {
-        const names = data.map((contact) => contact.name);
+        const names = data?.map((contact) => contact.name);
         setSuggestions(names.slice(0, 5));
         setShowSuggestions(true);
       } else {
@@ -134,6 +138,11 @@ const Home = () => {
         setIsDeleteModal={setIsDeleteModal}
         contactId={selectedContactId}
         fetchContacts={fetchContacts}
+      />
+      <ShareContactModal
+        shareModal={shareModal}
+        setShareModal={setShareModal}
+        contactId={contactId}
       />
       <EditContactModal isOpen={isOpenEdit} setIsOpen={setIsOpenEdit} contact={selectedContact} fetchContacts={fetchContacts} currentPage={currentPage} />
       <ToastContainer position="top-right" transition={Slide} className="z-50" autoClose={6000} closeButton={true} pauseOnHover={true} />
@@ -250,7 +259,6 @@ const Home = () => {
                 <div>
                   <div className='flex items-center gap-x-4 gap-2 mb-3'>
                     <div className="w-10 h-10 rounded-full overflow-hidden bg-indigo-600 text-white text-xl flex items-center justify-center font-bold">
-                      {console.log("profile previous: ", contact.profilePicture)}
                       {contact.profilePicture ? (
                         <img
                           src={`${contact.profilePicture}?t=${new Date().getTime()}`}
@@ -268,6 +276,11 @@ const Home = () => {
                         ⭐
                       </span>
                     )}
+                    <button
+                      onClick={() => { setShareModal(true); setContactId(contact._id) }}
+                      className='ml-4 cursor-pointer flex gap-2 px-2 py-1.5 bg-transparent border border-indigo-700 hover:bg-indigo-700 text-gray-800 dark:text-white rounded-lg'>
+                      <span className='transform -rotate-20'><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentcolor"><path d="M120-160v-640l760 320-760 320Zm80-120 474-200-474-200v140l240 60-240 60v140Zm0 0v-400 400Z" /></svg></span> Share
+                    </button>
                   </div>
                   <p className="text-gray-600 dark:text-gray-400 mb-1 flex gap-x-4 gap-2 items-center">
                     <span>{contact.email}</span>

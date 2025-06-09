@@ -54,10 +54,12 @@ const Register = () => {
       return
     }
 
+    console.log("Form Data: ", formData)
+
     try {
-      const response = await API.post("users/register", formData);
+      const response = await API.post("/users/register", formData);
       console.log(response)
-      toast.success("Registration Successfull");
+      toast.success("Registration Successful");
       navigate("/");
     } catch (err) {
       console.log("Registration Error: ", err);

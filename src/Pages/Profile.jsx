@@ -39,6 +39,7 @@ const Profile = () => {
                     address: data.address,
                     profilePhoto: data.profilePhoto
                 });
+                localStorage.setItem('user', JSON.stringify(response.data));
 
                 setProfilePhoto({
                     file: null,
@@ -123,10 +124,11 @@ const Profile = () => {
 
             console.log(response);
             if (response.status === 200 && response.data) {
+                localStorage.setItem('user', JSON.stringify(response.data));
+
                 await toast.success("Profile Edited Successfully");
 
                 console.log("Profile Uploaded Successfully")
-                localStorage.setItem('user', JSON.stringify(response.data));
                 setFormData({
                     name: '',
                     email: '',
@@ -156,7 +158,7 @@ const Profile = () => {
                                 {user.profilePhoto ? (
                                     <img src={user.profilePhoto} alt="Profile" className="w-20 h-20 rounded-full object-cover" />
                                 ) : (
-                                    <div className="w-20 h-20 rounded-full bg-gray-300 flex items-center justify-center text-2xl font-semibold text-white">
+                                    <div className="w-20 h-20 rounded-full bg-gray-600 flex items-center justify-center text-2xl font-semibold text-white">
                                         {user.username?.[0]?.toUpperCase()}
                                     </div>
                                 )}

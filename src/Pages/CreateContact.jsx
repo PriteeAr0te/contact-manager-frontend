@@ -103,14 +103,16 @@ const CreateContact = () => {
                 profilePicturePublicId: publicId,
             }
 
+            console.log("payload: ", payload)
+
             const response = await API.post("/contacts", payload, {
-                // headers: {
+                 // headers: {
                 //     'Content-Type': 'multipart/form-data',
                 // }
             });
-            console.log(response);
+            console.log("response", response);
             if (response.status === 201 && response.data) {
-                await toast.success("Contact created successfully!");
+                toast.success("Contact created successfully!");
                 navigate("/");
                 setFormData({
                     name: '',
@@ -238,13 +240,6 @@ const CreateContact = () => {
                         {error && <p className="text-red-600 text-sm mt-3">{error}</p>}
 
                         <div className="flex justify-end gap-2 pt-4">
-                            {/* <button
-                                type="button"
-                                onClick={() => setIsOpen(false)}
-                                className="rounded-md border cursor-pointer border-gray-300 bg-white px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
-                            >
-                                Cancel
-                            </button> */}
                             <ButtonComponent
                                 label="Create Contact"
                                 type="submit"

@@ -60,11 +60,10 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await API.post("users/login", formData);
+      const response = await API.post("/users/login", formData);
       const { token, user } = response.data;
       localStorage.setItem('token', token);
       login(token, user);
-      console.log("token: ", token)
       toast.success("Login Successfull!")
       navigate("/");
     } catch (err) {
