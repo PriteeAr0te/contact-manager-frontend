@@ -7,6 +7,7 @@ import ButtonComponent from '../Components/ui/ButtonComponent';
 import ProfilePhotoUpload from '../Components/ui/ProfilePhotoUpload';
 import { uploadImageToCloudinary } from '../utils/uploadImageToCloudinary';
 import API from '../lib/api';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
     const [error, setError] = useState('');
@@ -24,6 +25,8 @@ const Profile = () => {
         address: '',
         profilePhoto: null
     });
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getProfileData = async () => {
@@ -150,116 +153,124 @@ const Profile = () => {
     return (
         <>
             <ToastContainer position="top-right" transition={Slide} className="z-50" autoClose={6000} closeButton={true} pauseOnHover={true} />
-            <div className="flex items-center justify-center p-4">
-                <div className="w-full h-full sm:max-w-xl rounded-xl bg-white dark:bg-dark-background p-6 shadow-lg">
-                    {!editMode ?
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-4">
-                                {user.profilePhoto ? (
-                                    <img src={user.profilePhoto} alt="Profile" className="w-20 h-20 rounded-full object-cover" />
-                                ) : (
-                                    <div className="w-20 h-20 rounded-full bg-gray-600 flex items-center justify-center text-2xl font-semibold text-white">
-                                        {user.username?.[0]?.toUpperCase()}
+            <div className='bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300 px-2 sm:px-6 xl:px-20 py-6'>
+                  <button
+                    className="mb-6 text-blue-600 dark:text-gray-800 font-medium bg-gray-100 p-2 rounded-lg hover:bg-indigo-50 cursor-pointer"
+                    onClick={() => navigate(-1)}
+                >
+                    ← Back
+                </button>
+                <div className="flex items-center justify-center p-4">
+                    <div className="w-full h-full sm:max-w-xl rounded-xl bg-white dark:bg-dark-background p-6 shadow-lg">
+                        {!editMode ?
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-4">
+                                    {user.profilePhoto ? (
+                                        <img src={user.profilePhoto} alt="Profile" className="w-20 h-20 rounded-full object-cover" />
+                                    ) : (
+                                        <div className="w-20 h-20 rounded-full bg-gray-600 flex items-center justify-center text-2xl font-semibold text-white">
+                                            {user.username?.[0]?.toUpperCase()}
+                                        </div>
+                                    )}
+                                    <div>
+                                        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{user.username}</h2>
+                                        <p className="text-sm text-gray-500 dark:text-gray-300">{user.email}</p>
                                     </div>
-                                )}
-                                <div>
-                                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{user.username}</h2>
-                                    <p className="text-sm text-gray-500 dark:text-gray-300">{user.email}</p>
+                                </div>
+                                <div className="text-sm text-gray-700 dark:text-gray-300">
+                                    <p><strong>Phone:</strong> {user.phone}</p>
+                                    <p><strong>Address:</strong> {user.address}</p>
+                                    <p><strong>Created:</strong> {moment(user.createdAt).format('Do MMM YYYY, h:mm A')}</p>
+                                    <p><strong>Last Updated:</strong> {moment(user.updatedAt).format('Do MMM YYYY, h:mm A')}</p>
+
+                                </div>
+                                <div className="flex justify-end">
+                                    <button className={`flex cursor-pointer justify-center rounded-md bg-indigo-600 px-3 py-1.5 font-semibold text-white hover:bg-indigo-500 focus-visible:outline-none focus-visible:outline-indigo-600`} onClick={() => setEditMode(true)}>
+                                        Edit
+                                    </button>
                                 </div>
                             </div>
-                            <div className="text-sm text-gray-700 dark:text-gray-300">
-                                <p><strong>Phone:</strong> {user.phone}</p>
-                                <p><strong>Address:</strong> {user.address}</p>
-                                <p><strong>Created:</strong> {moment(user.createdAt).format('Do MMM YYYY, h:mm A')}</p>
-                                <p><strong>Last Updated:</strong> {moment(user.updatedAt).format('Do MMM YYYY, h:mm A')}</p>
-
-                            </div>
-                            <div className="flex justify-end">
-                                <button className={`flex cursor-pointer justify-center rounded-md bg-indigo-600 px-3 py-1.5 font-semibold text-white hover:bg-indigo-500 focus-visible:outline-none focus-visible:outline-indigo-600`} onClick={() => setEditMode(true)}>
-                                    Edit
-                                </button>
-                            </div>
-                        </div>
-                        :
-                        <>
-                            <div className="text-lg font-bold flex justify-between items-center dark:text-white text-gray-800 mb-4" >
-                                <span>Edit Profile</span>
-                            </div>
-
-                            <form onSubmit={handleSubmit} className="space-y-4">
-                                <div>
-                                    <InputComponent
-                                        label="Name"
-                                        name="name"
-                                        value={formData.name}
-                                        onChange={handleChange}
-                                        placeholder="Enter full name"
-                                    />
-                                    <p className='mt-2 text-red-600 text-sm'>{formErrors.name}</p>
+                            :
+                            <>
+                                <div className="text-lg font-bold bg-dark-background flex justify-between items-center dark:text-white text-gray-800 mb-4" >
+                                    <span>Edit Profile</span>
                                 </div>
 
-                                <div>
-                                    <InputComponent
-                                        label="Email"
-                                        name="email"
-                                        type="email"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        disabled={true}
-                                        placeholder="Enter email"
-                                    />
-                                    <p className='mt-2 text-red-600 text-sm'>{formErrors.email}</p>
-                                </div>
+                                <form onSubmit={handleSubmit} className="space-y-4">
+                                    <div>
+                                        <InputComponent
+                                            label="Name"
+                                            name="name"
+                                            value={formData.name}
+                                            onChange={handleChange}
+                                            placeholder="Enter full name"
+                                        />
+                                        <p className='mt-2 text-red-600 text-sm'>{formErrors.name}</p>
+                                    </div>
 
-                                <div>
-                                    <InputComponent
-                                        label="Phone"
-                                        name="phone"
-                                        type="tel"
-                                        value={formData.phone || ''}
-                                        onChange={handleChange}
-                                        placeholder="Enter phone number"
-                                    />
-                                    <p className='mt-2 text-red-600 text-sm'>{formErrors.phone}</p>
-                                </div>
+                                    <div>
+                                        <InputComponent
+                                            label="Email"
+                                            name="email"
+                                            type="email"
+                                            value={formData.email}
+                                            onChange={handleChange}
+                                            disabled={true}
+                                            placeholder="Enter email"
+                                        />
+                                        <p className='mt-2 text-red-600 text-sm'>{formErrors.email}</p>
+                                    </div>
 
-                                <div>
-                                    <TextareaComponent
-                                        label="Address"
-                                        name="address"
-                                        id="address"
-                                        value={formData.address || ''}
-                                        onChange={handleChange}
-                                    />
-                                    <p className='text-red-600 mt-2, text-sm'>{formErrors.address}</p>
-                                </div>
+                                    <div>
+                                        <InputComponent
+                                            label="Phone"
+                                            name="phone"
+                                            type="tel"
+                                            value={formData.phone || ''}
+                                            onChange={handleChange}
+                                            placeholder="Enter phone number"
+                                        />
+                                        <p className='mt-2 text-red-600 text-sm'>{formErrors.phone}</p>
+                                    </div>
 
-                                <div>
-                                    <ProfilePhotoUpload
-                                        label="Profile Photo"
-                                        value={profilePhoto?.previewUrl || ''}
-                                        onChange={(file, previewUrl) => {
-                                            setProfilePhoto({ file, previewUrl });
-                                            setFormData(prev => ({
-                                                ...prev,
-                                                profilePhoto: file
-                                            }))
-                                        }}
-                                    />
-                                </div>
+                                    <div>
+                                        <TextareaComponent
+                                            label="Address"
+                                            name="address"
+                                            id="address"
+                                            value={formData.address || ''}
+                                            onChange={handleChange}
+                                        />
+                                        <p className='text-red-600 mt-2, text-sm'>{formErrors.address}</p>
+                                    </div>
 
-                                {error && <p className="text-red-600 text-sm mt-3">{error}</p>}
+                                    <div>
+                                        <ProfilePhotoUpload
+                                            label="Profile Photo"
+                                            value={profilePhoto?.previewUrl || ''}
+                                            onChange={(file, previewUrl) => {
+                                                setProfilePhoto({ file, previewUrl });
+                                                setFormData(prev => ({
+                                                    ...prev,
+                                                    profilePhoto: file
+                                                }))
+                                            }}
+                                        />
+                                    </div>
 
-                                <div className="flex justify-end gap-2 pt-4">
-                                    <ButtonComponent
-                                        label="Edit Profile"
-                                        type="submit"
-                                        width="w-fit" />
+                                    {error && <p className="text-red-600 text-sm mt-3">{error}</p>}
 
-                                </div>
-                            </form>
-                        </>
-                    }
+                                    <div className="flex justify-end gap-2 pt-4">
+                                        <ButtonComponent
+                                            label="Edit Profile"
+                                            type="submit"
+                                            width="w-fit" />
+
+                                    </div>
+                                </form>
+                            </>
+                        }
+                    </div>
                 </div>
             </div>
 

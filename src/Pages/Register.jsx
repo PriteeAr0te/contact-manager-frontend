@@ -59,8 +59,10 @@ const Register = () => {
     try {
       const response = await API.post("/users/register", formData);
       console.log(response)
-      toast.success("Registration Successful");
       navigate("/");
+      setTimeout(() => {
+        toast.success("Registration Successfull ✅");
+      }, 500)
     } catch (err) {
       console.log("Registration Error: ", err);
       setError(err.response?.data?.message || "Something went wrong");

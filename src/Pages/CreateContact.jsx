@@ -106,7 +106,7 @@ const CreateContact = () => {
             console.log("payload: ", payload)
 
             const response = await API.post("/contacts", payload, {
-                 // headers: {
+                // headers: {
                 //     'Content-Type': 'multipart/form-data',
                 // }
             });
@@ -138,115 +138,124 @@ const CreateContact = () => {
     return (
         <>
             <ToastContainer position="top-right" transition={Slide} className="z-50" autoClose={6000} closeButton={true} pauseOnHover={true} />
-            <div className="flex items-center justify-center p-4">
-                <div className="w-full h-full sm:max-w-xl rounded-xl bg-white dark:bg-dark-background p-6 shadow-lg">
-                    <div className="text-lg font-bold flex justify-between items-center dark:text-white text-gray-800 mb-4" >
-                        <span>Create New Contact</span>
+            <div className='bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300 px-2 sm:px-6 xl:px-20 py-6'>
+                <button
+                    className="mb-4 text-blue-600 dark:text-gray-800 font-medium bg-gray-100 p-2 rounded-lg hover:bg-indigo-50 cursor-pointer"
+                    onClick={() => navigate(-1)}
+                >
+                    ← Back
+                </button>
+                <div className="flex items-center justify-center
+             flex-col p-4">
+                    <div className="w-full h-full sm:max-w-xl rounded-xl bg-white dark:bg-dark-background p-6 shadow-lg">
+                        <div className="text-lg font-bold flex justify-between items-center dark:text-white text-gray-800 mb-4" >
+                            <span>Create New Contact</span>
+                        </div>
+
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <div>
+                                <InputComponent
+                                    label="Name"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    placeholder="Enter full name"
+                                />
+                                <p className='mt-2 text-red-600 text-sm'>{formErrors.name}</p>
+                            </div>
+
+                            <div>
+                                <InputComponent
+                                    label="Email"
+                                    name="email"
+                                    type="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    placeholder="Enter email"
+                                />
+                                <p className='mt-2 text-red-600 text-sm'>{formErrors.email}</p>
+                            </div>
+
+                            <div>
+                                <InputComponent
+                                    label="Phone"
+                                    name="phone"
+                                    type="tel"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    placeholder="Enter phone number"
+                                />
+                                <p className='mt-2 text-red-600 text-sm'>{formErrors.phone}</p>
+                            </div>
+
+                            <div>
+                                <TextareaComponent
+                                    label="Address"
+                                    name="address"
+                                    id="address"
+                                    value={formData.address}
+                                    onChange={handleChange}
+                                />
+                                <p className='text-red-600 mt-2, text-sm'>{formErrors.address}</p>
+                            </div>
+
+                            <div>
+                                <ProfilePhotoUpload
+                                    value={profilePhoto?.previewUrl}
+                                    onChange={(file, previewUrl) => {
+                                        setProfilePhoto({ file, previewUrl });
+                                        setFormData(prev => ({
+                                            ...prev,
+                                            profilePicture: file
+                                        }))
+                                    }}
+                                />
+                            </div>
+
+                            <div>
+                                <CheckboxComponent name="isFavorite" id="isFavorite" checked={formData.isFavorite} label="Mark as favorite" onChange={handleChange} />
+                            </div>
+
+                            <div>
+                                <DropdownComponent
+                                    search={false}
+                                    label='Select Tag'
+                                    name="Tag"
+                                    id="tags"
+                                    showCheckbox={false}
+                                    options={options}
+                                    selectedValue={formData.tags[0] || ""}
+                                    onChange={(selected) => {
+                                        setFormData(prev => ({
+                                            ...prev,
+                                            tags: [selected]
+                                        }))
+                                    }}
+                                />
+                            </div>
+
+                            <div>
+                                <TextareaComponent
+                                    label="Notes"
+                                    name="notes"
+                                    id="notes"
+                                    value={formData.notes}
+                                    onChange={handleChange}
+                                />
+                                <p className='text-red-600 mt-2, text-sm'>{formErrors.notes}</p>
+                            </div>
+
+                            {error && <p className="text-red-600 text-sm mt-3">{error}</p>}
+
+                            <div className="flex justify-end gap-2 pt-4">
+                                <ButtonComponent
+                                    label="Create Contact"
+                                    type="submit"
+                                    width="w-fit" />
+
+                            </div>
+                        </form>
                     </div>
-
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div>
-                            <InputComponent
-                                label="Name"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleChange}
-                                placeholder="Enter full name"
-                            />
-                            <p className='mt-2 text-red-600 text-sm'>{formErrors.name}</p>
-                        </div>
-
-                        <div>
-                            <InputComponent
-                                label="Email"
-                                name="email"
-                                type="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                placeholder="Enter email"
-                            />
-                            <p className='mt-2 text-red-600 text-sm'>{formErrors.email}</p>
-                        </div>
-
-                        <div>
-                            <InputComponent
-                                label="Phone"
-                                name="phone"
-                                type="tel"
-                                value={formData.phone}
-                                onChange={handleChange}
-                                placeholder="Enter phone number"
-                            />
-                            <p className='mt-2 text-red-600 text-sm'>{formErrors.phone}</p>
-                        </div>
-
-                        <div>
-                            <TextareaComponent
-                                label="Address"
-                                name="address"
-                                id="address"
-                                value={formData.address}
-                                onChange={handleChange}
-                            />
-                            <p className='text-red-600 mt-2, text-sm'>{formErrors.address}</p>
-                        </div>
-
-                        <div>
-                            <ProfilePhotoUpload
-                                value={profilePhoto?.previewUrl}
-                                onChange={(file, previewUrl) => {
-                                    setProfilePhoto({ file, previewUrl });
-                                    setFormData(prev => ({
-                                        ...prev,
-                                        profilePicture: file
-                                    }))
-                                }}
-                            />
-                        </div>
-
-                        <div>
-                            <CheckboxComponent name="isFavorite" id="isFavorite" checked={formData.isFavorite} label="Mark as favorite" onChange={handleChange} />
-                        </div>
-
-                        <div>
-                            <DropdownComponent
-                                search={false}
-                                label='Select Tag'
-                                name="Tag"
-                                id="tags"
-                                showCheckbox={false}
-                                options={options}
-                                selectedValue={formData.tags[0] || ""}
-                                onChange={(selected) => {
-                                    setFormData(prev => ({
-                                        ...prev,
-                                        tags: [selected]
-                                    }))
-                                }}
-                            />
-                        </div>
-
-                        <div>
-                            <TextareaComponent
-                                label="Notes"
-                                name="notes"
-                                id="notes"
-                                value={formData.notes}
-                                onChange={handleChange}
-                            />
-                            <p className='text-red-600 mt-2, text-sm'>{formErrors.notes}</p>
-                        </div>
-
-                        {error && <p className="text-red-600 text-sm mt-3">{error}</p>}
-
-                        <div className="flex justify-end gap-2 pt-4">
-                            <ButtonComponent
-                                label="Create Contact"
-                                type="submit"
-                                width="w-fit" />
-
-                        </div>
-                    </form>
                 </div>
             </div>
 

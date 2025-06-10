@@ -31,7 +31,10 @@ const ShareContactModal = ({ contactId, shareModal, setShareModal }) => {
     try {
         const res = await API.post(`/contacts/${contactId}/share`, {user});
         console.log("Response: ", res);
-        await toast.success("Contact shared successfully ✅");
+        setShareModal(false);
+        setTimeout(() => {
+            toast.success("Contact shared successfully ✅");
+        }, 500)
         setSelectedUser(null);
         setQuery("");
         setResults([]);

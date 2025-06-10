@@ -8,7 +8,7 @@ import CreateContact from './Pages/CreateContact'
 import PrivateRoute from './PrivateRoute'
 import ContactDetails from './Pages/ContactDetails'
 import Profile from './Pages/Profile'
-import SharedContactsPage from './Pages/SharedContact'
+import SharedContacts from './Pages/SharedContacts'
 
 const noLayoutRoutes = ["/login", "/register"];
 
@@ -36,7 +36,7 @@ function App() {
           <Route path='/create-contact' element={<CreateContact />} />
           <Route path='/contact/:id' element={<ContactDetails />} />
           <Route path='/myprofile' element={<Profile />} />
-          <Route path='/shared-contacts' element={<SharedContactsPage />} />
+          <Route path='/shared-contacts' element={<SharedContacts />} />
         </Routes>
       </Layout>
     </>
