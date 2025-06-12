@@ -1,9 +1,10 @@
 import InputComponent from "../Components/ui/InputComponent";
 import ButtonComponent from "../Components/ui/ButtonComponent";
-import { Slide, toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import API from "../lib/api";
+import Logo from '../assets/logo.png';
 
 const Register = () => {
   const [error, setError] = useState('');
@@ -60,9 +61,7 @@ const Register = () => {
       const response = await API.post("/users/register", formData);
       console.log(response)
       navigate("/");
-      setTimeout(() => {
-        toast.success("Registration Successfull ✅");
-      }, 500)
+      toast.success("Registration Successfull ✅");
     } catch (err) {
       console.log("Registration Error: ", err);
       setError(err.response?.data?.message || "Something went wrong");
@@ -72,14 +71,19 @@ const Register = () => {
 
   return (
     <div className="bg-dark-background min-h-screen flex items-center justify-center text-white">
-      <ToastContainer position="top-right" transition={Slide} className="z-50" autoClose={6000} closeButton={true} pauseOnHover={true} />
+
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-10 lg:px-8 rounded-md">
         <div className="sm:mx-auto sm:w-full sm:max-w-md min-w-md">
-          <img
-            alt="Your Company"
-            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-            className="mx-auto h-10 w-auto"
-          />
+          <div className="flex-shrink-0 flex items-center w-full justify-center mb-3">
+            <img
+              className="h-8 w-auto"
+              width={200}
+              height={60}
+              src={Logo}
+              alt="TalentDeck Logo"
+            />
+            <span className="ml-2 font-bold sm:text-lg text-white">Contact Book</span>
+          </div>
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-white">
             Create your account
           </h2>

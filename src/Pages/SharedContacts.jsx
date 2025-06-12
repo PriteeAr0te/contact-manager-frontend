@@ -2,18 +2,25 @@ import { useEffect, useState } from "react";
 import API from "../lib/api";
 import ProfilePhoto from "../../src/assets/profile-pic.jpg";
 import moment from "moment";
-import { Slide, toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { markSharedContactsAsViewedThunk } from "../redux/slices/sharedContactsSlice";
 
 const SharedContacts = () => {
     const [sharedContacts, setSharedContacts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleCopy = (text, label) => {
         navigator.clipboard.writeText(text);
         toast.success(`${label} copied to clipboard!`);
     };
+
+    useEffect(() => {
+        dispatch(markSharedContactsAsViewedThunk());
+    }, [dispatch])
 
     useEffect(() => {
         const fetchSharedContacts = async () => {
@@ -35,7 +42,6 @@ const SharedContacts = () => {
 
     return (
         <>
-            <ToastContainer position="top-right" transition={Slide} className="z-50" autoClose={6000} closeButton={true} pauseOnHover={true} />
 
             <div className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300 px-2 sm:px-6 xl:px-20 py-6">
                 <button
@@ -63,7 +69,6 @@ const SharedContacts = () => {
                                     key={contact._id}
                                     className="p-4 border rounded-2xl bg-white dark:bg-dark-background shadow-md hover:shadow-lg transition duration-300 flex items-start gap-4"
                                 >
-                                    {console.log("Contact Detail:", contact)}
                                     <img
                                         src={contact.profilePicture || ProfilePhoto}
                                         alt="Profile"

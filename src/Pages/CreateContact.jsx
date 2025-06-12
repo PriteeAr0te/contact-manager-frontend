@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Slide, toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import InputComponent from '../Components/ui/InputComponent';
 import TextareaComponent from '../Components/ui/TextareaComponent';
 import ProfilePhotoUpload from '../Components/ui/ProfilePhotoUpload';
@@ -137,7 +137,6 @@ const CreateContact = () => {
 
     return (
         <>
-            <ToastContainer position="top-right" transition={Slide} className="z-50" autoClose={6000} closeButton={true} pauseOnHover={true} />
             <div className='bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300 px-2 sm:px-6 xl:px-20 py-6'>
                 <button
                     className="mb-4 text-blue-600 dark:text-gray-800 font-medium bg-gray-100 p-2 rounded-lg hover:bg-indigo-50 cursor-pointer"

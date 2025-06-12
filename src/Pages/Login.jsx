@@ -4,7 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Hookes/useAuth";
 import { useEffect, useState } from "react";
 import API from "../lib/api";
-import { Slide, toast, ToastContainer } from "react-toastify";
+import { toast, ToastContainer, Slide } from "react-toastify";
+import Logo from '../assets/logo.png';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -66,9 +67,8 @@ const Login = () => {
       localStorage.setItem('token', token);
       login(token, user);
       navigate("/");
-      setTimeout(() => {
-         toast.success("Login Successfull! ✅");
-      }, 500)
+      toast.dismiss();
+      toast.success("Login Successful! ✅");
     } catch (err) {
       console.log("Login Error: ", err);
       setError(err.response?.data?.message || "Something went wrong");
@@ -79,15 +79,19 @@ const Login = () => {
 
   return (
     <>
-      <ToastContainer position="top-right" transition={Slide} className="z-50" autoClose={6000} closeButton={true} pauseOnHover={true} />
       <div className="bg-dark-background min-h-screen flex items-center justify-center text-white">
         <div className="flex min-h-full flex-1 flex-col justify-center items-center px-6 py-10 lg:px-8 rounded-md">
           <div className="sm:mx-auto sm:w-full sm:max-w-lg sm:min-w-md">
-            <img
-              alt="Your Company"
-              src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-              className="mx-auto h-10 w-auto"
-            />
+            <div className="flex-shrink-0 flex items-center w-full justify-center mb-3">
+              <img
+                className="h-8 w-auto"
+                width={200}
+                height={60}
+                src={Logo}
+                alt="TalentDeck Logo"
+              />
+              <span className="ml-2 font-bold sm:text-lg text-white">Contact Book</span>
+            </div>
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-white">
               Sign in to your account
             </h2>

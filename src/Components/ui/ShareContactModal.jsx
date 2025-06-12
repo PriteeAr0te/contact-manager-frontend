@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import InputComponent from "./InputComponent";
-import { Slide, toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import API from "../../lib/api";
 
 const ShareContactModal = ({ contactId, shareModal, setShareModal }) => {
@@ -28,25 +28,22 @@ const ShareContactModal = ({ contactId, shareModal, setShareModal }) => {
     };
 
     const handleShare = async (user) => {
-    try {
-        const res = await API.post(`/contacts/${contactId}/share`, {user});
-        console.log("Response: ", res);
-        setShareModal(false);
-        setTimeout(() => {
+        try {
+            const res = await API.post(`/contacts/${contactId}/share`, { user });
+            console.log("Response: ", res);
+            setShareModal(false);
             toast.success("Contact shared successfully ✅");
-        }, 500)
-        setSelectedUser(null);
-        setQuery("");
-        setResults([]);
-    } catch (err) {
-        console.error("Share failed:", err?.response?.data || err.message);
-        toast.error("Failed to share. Try again ❌");
-    }
-};
+            setSelectedUser(null);
+            setQuery("");
+            setResults([]);
+        } catch (err) {
+            console.error("Share failed:", err?.response?.data || err.message);
+            toast.error("Failed to share. Try again ❌");
+        }
+    };
 
     return (
         <>
-            <ToastContainer position="top-right" transition={Slide} className="z-50" autoClose={6000} closeButton={true} pauseOnHover={true} />
 
             <Dialog open={shareModal} onClose={() => setShareModal(false)} className="relative z-10">
                 <div className="fixed inset-0 bg-black/50" aria-hidden="true" />

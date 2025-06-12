@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import API from '../lib/api';
 import EditContactModal from '../Components/ui/EditContactModal';
-import { Slide, toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import DropdownComponent from '../Components/ui/DropdownComponent';
 import PaginationComponent from '../Components/ui/PaginationComponent';
 import ContactStats from '../Components/ui/ContactStats';
@@ -59,7 +59,6 @@ const Home = () => {
       });
       const data = response.data;
       setContacts(data);
-      console.log("Contact Data: ", data)
       setTotalPages(data.totalPages);
       setCurrentPage(data.currentPage);
 
@@ -145,7 +144,6 @@ const Home = () => {
         contactId={contactId}
       />
       <EditContactModal isOpen={isOpenEdit} setIsOpen={setIsOpenEdit} contact={selectedContact} fetchContacts={fetchContacts} currentPage={currentPage} />
-      <ToastContainer position="top-right" transition={Slide} className="z-50" autoClose={6000} closeButton={true} pauseOnHover={true} />
       <div className="px-4 w-full min-h-screen mx-auto py-12 xl:px-32 2xl:px-40 bg-white dark:bg-dark-background overflow-x-hidden">
         <div className="w-fit sm:w-auto flex flex-wrap justify-end gap-4 mb-4">
           <ExportCSV />
