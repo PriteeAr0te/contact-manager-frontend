@@ -105,7 +105,6 @@ const Home = () => {
         }
       });
       setSelectedContact(response.data);
-      console.log(response.data);
       setIsOpenEdit(true);
     } catch (err) {
       console.log("Failed to fetch contact for editing: ", err);

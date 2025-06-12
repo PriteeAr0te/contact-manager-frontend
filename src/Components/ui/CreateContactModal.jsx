@@ -101,7 +101,6 @@ const CreateContactModal = ({ isOpen, setIsOpen }) => {
                     'Content-Type': 'multipart/form-data',
                 }
             });
-            console.log(response);
             if (response.status === 201 && response.data) {
                 await toast.success("Contact created successfully!");
                 setIsOpen(false);
@@ -123,7 +122,6 @@ const CreateContactModal = ({ isOpen, setIsOpen }) => {
             setError("Failed to create contact. Please try again.");
             return;
         }
-        console.log("Contact Created");
     }
 
     return (

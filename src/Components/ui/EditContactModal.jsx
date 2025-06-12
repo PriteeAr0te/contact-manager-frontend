@@ -107,8 +107,6 @@ const EditContactModal = ({ isOpen, setIsOpen, contact, fetchContacts, currentPa
             profilePicturePublicId: publicId,
         };
 
-        console.log("📦 Sending updated contact to backend:", payload);
-
         try {
             const response = await API.put(`/contacts/${contact._id}`, payload);
 

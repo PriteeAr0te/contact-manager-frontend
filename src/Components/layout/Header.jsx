@@ -36,8 +36,6 @@ const Header = () => {
         if (dropdown?.open) dropdown.removeAttribute('open');
     };
 
-    console.log("is Contact Seen: ", hasUnseen);
-
     return (
         <nav className="bg-dark shadow">
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">

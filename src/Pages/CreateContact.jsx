@@ -77,7 +77,6 @@ const CreateContact = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("submitting")
         const errors = validate();
         if (Object.keys(errors).length > 0) {
             setFormErrors(errors);
@@ -102,8 +101,6 @@ const CreateContact = () => {
                 profilePicture: imageUrl,
                 profilePicturePublicId: publicId,
             }
-
-            console.log("payload: ", payload)
 
             const response = await API.post("/contacts", payload, {
                 // headers: {
@@ -132,7 +129,6 @@ const CreateContact = () => {
             setError("Failed to create contact. Please try again.");
             return;
         }
-        console.log("Contact Created");
     }
 
     return (

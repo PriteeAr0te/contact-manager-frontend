@@ -10,7 +10,6 @@ export const fetchUnseenSharedStatus = createAsyncThunk(
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    console.log("shared status: ", res.data.hasUnseen);
     return res.data.hasUnseen;
   }
 );

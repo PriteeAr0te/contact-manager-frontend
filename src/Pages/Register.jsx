@@ -55,8 +55,6 @@ const Register = () => {
       return
     }
 
-    console.log("Form Data: ", formData)
-
     try {
       const response = await API.post("/users/register", formData);
       console.log(response)

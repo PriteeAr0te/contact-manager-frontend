@@ -63,7 +63,6 @@ const Login = () => {
     try {
       const response = await API.post("/users/login", formData);
       const { token, user } = response.data;
-      console.log("Login")
       localStorage.setItem('token', token);
       login(token, user);
       navigate("/");

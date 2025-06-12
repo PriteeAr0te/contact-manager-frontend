@@ -97,7 +97,6 @@ const Profile = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("submitting")
         const errors = validate();
         if (Object.keys(errors).length > 0) {
             setFormErrors(errors);
@@ -121,17 +120,14 @@ const Profile = () => {
                 profilePhoto: imageUrl,
                 profilePicturePublicId: publicId
             }
-            console.log("payload", payload)
 
             const response = await API.put("/users/me", payload);
 
-            console.log(response);
             if (response.status === 200 && response.data) {
                 localStorage.setItem('user', JSON.stringify(response.data));
 
                 await toast.success("Profile Edited Successfully");
 
-                console.log("Profile Uploaded Successfully")
                 setFormData({
                     name: '',
                     email: '',
@@ -147,7 +143,6 @@ const Profile = () => {
             setError("Failed to edit profile. Please try again.");
             return;
         }
-        console.log("Profile Updated");
     }
 
     return (

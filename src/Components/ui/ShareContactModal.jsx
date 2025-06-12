@@ -16,7 +16,6 @@ const ShareContactModal = ({ contactId, shareModal, setShareModal }) => {
         try {
             const res = await API.get(`/users/search?query=${query}`);
             setResults(res.data);
-            console.log("User: ", res.data)
             if (res.status === 200) {
                 console.log("query success")
             }
@@ -30,7 +29,6 @@ const ShareContactModal = ({ contactId, shareModal, setShareModal }) => {
     const handleShare = async (user) => {
         try {
             const res = await API.post(`/contacts/${contactId}/share`, { user });
-            console.log("Response: ", res);
             setShareModal(false);
             toast.success("Contact shared successfully ✅");
             setSelectedUser(null);
@@ -75,7 +73,6 @@ const ShareContactModal = ({ contactId, shareModal, setShareModal }) => {
                                             className="flex items-center justify-between p-2 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-sm hover:bg-gray-200 dark:hover:bg-gray-700 transition cursor-pointer"
                                             onClick={() => handleShare(user)}
                                         >
-                                            {console.log("User email: ", user.email, user._id)}
                                             <div className="flex items-center gap-3">
                                                 <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-sm">
                                                     {user.profilePhoto ? (
