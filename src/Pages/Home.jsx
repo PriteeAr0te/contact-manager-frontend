@@ -144,7 +144,7 @@ const Home = () => {
         contactId={contactId}
       />
       <EditContactModal isOpen={isOpenEdit} setIsOpen={setIsOpenEdit} contact={selectedContact} fetchContacts={fetchContacts} currentPage={currentPage} />
-      <div className="px-4 w-full min-h-screen mx-auto py-12 xl:px-32 2xl:px-40 bg-white dark:bg-dark-background overflow-x-hidden">
+      <div className="px-4 w-full min-h-screen mx-auto py-8 xl:px-32 2xl:px-40 bg-white dark:bg-dark-background overflow-x-hidden">
         <div className="w-fit sm:w-auto flex flex-wrap justify-end gap-4 mb-4">
           <ExportCSV />
           <ContactStats />
@@ -154,7 +154,7 @@ const Home = () => {
           <div className='flex flex-wrap gap-2 items-start'>
             <button
               onClick={() => setIsFavorite(prev => !prev)}
-              className="ml-4 p-2"
+              className="ml-2 p-2"
               title="Show Favorites Only cursor-pointer"
             >
               {isFavorite ? (
@@ -253,7 +253,7 @@ const Home = () => {
         ) : (
           <ul className="space-y-4">
             {contacts?.contacts?.map((contact) => (
-              <li key={contact._id} className="border border-light dark:border-gray-100 rounded-lg p-4 shadow-sm flex sm:justify-between justify-center sm:flex-row flex-col gap-y-4 items-center hover:bg-gray-50 dark:hover:bg-dark-background">
+              <li key={contact._id} className="border border-light dark:border-gray-100 rounded-lg p-4 shadow-sm flex sm:justify-between justify-start sm:flex-row flex-col gap-y-4 items-start sm:items-center hover:bg-gray-50 dark:hover:bg-dark-background">
                 <div>
                   <div className='flex items-center gap-x-4 gap-2 mb-3'>
                     <div className="w-10 h-10 rounded-full overflow-hidden bg-indigo-600 text-white text-xl flex items-center justify-center font-bold">
@@ -275,7 +275,7 @@ const Home = () => {
                       </span>
                     )}
                     <button
-                      onClick={() => { setShareModal(true); setContactId(contact._id) }}
+                      onClick={() => { setContactId(contact._id); setShareModal(true) }}
                       className='ml-4 cursor-pointer flex gap-2 px-2 py-1.5 bg-transparent border border-indigo-700 hover:bg-indigo-700 text-gray-800 dark:text-white rounded-lg'>
                       <span className='transform -rotate-20'><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentcolor"><path d="M120-160v-640l760 320-760 320Zm80-120 474-200-474-200v140l240 60-240 60v140Zm0 0v-400 400Z" /></svg></span> Share
                     </button>

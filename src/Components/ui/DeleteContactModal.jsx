@@ -10,6 +10,7 @@ const DeleteContactModal = ({
   fetchContacts,
   decrementStats
 }) => {
+  
   const handleConfirmDelete = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -56,7 +57,7 @@ const DeleteContactModal = ({
               <button
                 type="button"
                 onClick={handleConfirmDelete}
-                className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 sm:ml-3 sm:w-auto"
+                className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white cursor-pointer shadow-xs hover:bg-red-500 sm:ml-3 sm:w-auto"
               >
                 Delete
               </button>

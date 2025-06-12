@@ -53,9 +53,9 @@ const ContactDetails = () => {
 
     return (
         <>
-            <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300 px-6 py-6">
+            <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300 px-6 py-4">
                 <button
-                    className="mb-6 text-blue-600 dark:text-gray-800 font-medium bg-gray-100 p-2 rounded-lg hover:bg-indigo-50 cursor-pointer"
+                    className="mb-4 text-blue-600 dark:text-gray-800 font-medium bg-gray-100 p-2 rounded-lg hover:bg-indigo-50 cursor-pointer"
                     onClick={() => navigate(-1)}
                 >
                     ← Back

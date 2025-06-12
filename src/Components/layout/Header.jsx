@@ -42,7 +42,7 @@ const Header = () => {
         <nav className="bg-dark shadow">
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16 items-center">
-                    <Link to="/" className="flex-shrink-0 flex items-center">
+                    <Link to="/" className="flex-shrink-0 flex items-center h-fit">
                         <img
                             className="h-8 w-auto"
                             width={200}
@@ -50,14 +50,14 @@ const Header = () => {
                             src={Logo}
                             alt="TalentDeck Logo"
                         />
-                        <span className="ml-2 font-bold sm:text-lg text-white">Contact Book</span>
+                        <span className="ml-2 font-bold sm:text-lg text-white h-fit">Contact Book</span>
                     </Link>
 
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-4 h-fit">
 
                         <Link
                             to="/create-contact"
-                            className={`flex w-fit text-sm whitespace-nowrap sm:text-base cursor-pointer justify-center rounded-md bg-indigo-700 px-3 py-1.5 font-semibold text-white hover:bg-indigo-600 focus:border-0 focus:outline-none`}
+                            className={`flex w-fit h-fit text-sm whitespace-nowrap sm:text-base cursor-pointer justify-center rounded-md bg-indigo-700 px-3 py-1.5 font-semibold text-white hover:bg-indigo-600 focus:border-0 focus:outline-none`}
                         >
                             Create Contact
                         </Link>
